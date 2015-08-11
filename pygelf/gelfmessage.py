@@ -1,4 +1,5 @@
 import logging
+import json
 
 
 _levels = {
@@ -12,7 +13,7 @@ _levels = {
 
 class GelfMessage:
 
-    def __init__(self, record, debug):
+    def __init__(self, record, debug, additional_fields):
         self.version = '1.1'
         self.short_message = record.message
         self.full_message = record.exc_text
@@ -24,3 +25,11 @@ class GelfMessage:
             self._line = record.lineno
             self._module = record.module
             self._func = record.funcName
+
+        if additional_fields:
+            vars(self).update(additional_fields)
+
+    def pack(self):
+        d = vars(self)
+        packed = json.dumps(d)
+        return packed.encode('utf-8')
