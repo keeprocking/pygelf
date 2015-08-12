@@ -19,4 +19,4 @@ class GelfTcpHandler(SocketHandler):
 
     def makePickle(self, record):
         message = GelfMessage(record, self.debug, self.additional_fields)
-        return message.pack() + '\0'.encode('utf-8')
+        return message.pack() + b'\x00'

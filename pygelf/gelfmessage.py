@@ -30,6 +30,6 @@ class GelfMessage:
             vars(self).update(additional_fields)
 
     def pack(self):
-        d = vars(self)
-        packed = json.dumps(d)
+        message = vars(self)
+        packed = json.dumps(message)
         return packed.encode('utf-8')
