@@ -1,10 +1,10 @@
 from logging.handlers import SocketHandler
-from pygelf.gelf import make_gelf
+from pygelf.gelf import make_gelf, pack_gelf
 
 
 class GelfTcpHandler(SocketHandler):
 
-    def __init__(self, host, port, debug=False, **kwargs):
+    def __init__(self, host, port, debug=False, compress=True, **kwargs):
         """
         :param host: gelf tcp input host
         :param port: gelf tcp input port
@@ -15,8 +15,10 @@ class GelfTcpHandler(SocketHandler):
         super(GelfTcpHandler, self).__init__(host, port)
         self.additional_fields = kwargs
         self.debug = debug
+        self.compress = compress
         self.additional_fields.pop('_id', None)
 
     def makePickle(self, record):
         gelf = make_gelf(record, self.debug, self.additional_fields)
-        return gelf.encode('utf8') + b'\x00'
+        packed = pack_gelf(gelf, self.compress)
+        return packed + b'\x00'
