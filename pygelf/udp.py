@@ -1,5 +1,8 @@
 from logging.handlers import DatagramHandler
-from pygelf.gelfmessage import GelfMessage
+from pygelf.gelf import make_gelf
+
+
+MAX_MESSAGE_LENGTH = 1
 
 
 class GelfUdpHandler(DatagramHandler):
@@ -9,12 +12,14 @@ class GelfUdpHandler(DatagramHandler):
         self.additional_fields = kwargs
         self.debug = debug
         self.chunk_size = chunk_size
-
         self.additional_fields.pop('_id', None)
 
     def send(self, s):
         pass
 
     def makePickle(self, record):
-        message = GelfMessage(record, self.debug, self.additional_fields)
-        return message.pack()
+        gelf = make_gelf(record, self.debug, self.additional_fields)
+        return gelf.encode('utf8')
+
+    def split_message(self):
+        pass

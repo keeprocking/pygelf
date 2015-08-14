@@ -1,5 +1,5 @@
 from logging.handlers import SocketHandler
-from pygelf.gelfmessage import GelfMessage
+from pygelf.gelf import make_gelf
 
 
 class GelfTcpHandler(SocketHandler):
@@ -18,5 +18,5 @@ class GelfTcpHandler(SocketHandler):
         self.additional_fields.pop('_id', None)
 
     def makePickle(self, record):
-        message = GelfMessage(record, self.debug, self.additional_fields)
-        return message.pack() + b'\x00'
+        gelf = make_gelf(record, self.debug, self.additional_fields)
+        return gelf.encode('utf8') + b'\x00'
