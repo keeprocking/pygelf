@@ -1,6 +1,8 @@
 import logging
 import json
 import zlib
+import os
+import struct
 
 
 _levels = {
@@ -12,15 +14,7 @@ _levels = {
 }
 
 
-def make_gelf(record, debug, additional_fields):
-    """
-
-    :param record:
-    :param debug:
-    :param additional_fields:
-    :return:
-    """
-
+def make(record, debug, additional_fields):
     gelf = {
         'version': '1.1',
         'short_message': record.message,
@@ -43,7 +37,22 @@ def make_gelf(record, debug, additional_fields):
     return gelf
 
 
-def pack_gelf(gelf, compress):
+def pack(gelf, compress):
     packed = json.dumps(gelf).encode('utf8')
     return zlib.compress(packed) if compress else packed
 
+
+def split(gelf, chunk_size):
+    header = b'\x1e\x0f'
+    message_id = os.urandom(8)
+    chunks = [gelf[pos:pos+chunk_size] for pos in range(0, len(gelf), chunk_size)]
+    number_of_chunks = struct.pack('b', len(chunks))
+
+    for chunk_index, chunk in enumerate(chunks):
+        yield b''.join((
+            header,
+            message_id,
+            struct.pack('b', chunk_index),
+            number_of_chunks,
+            chunk
+        ))
