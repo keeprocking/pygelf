@@ -14,7 +14,7 @@ class GelfUdpHandler(DatagramHandler):
         :param port: gelf tcp input port
         :param debug: include debug fields, e.g. line number, or not
         :param compress: compress message before send it to the server or not
-        :param chunk_size: maximum length of the message, should be less than the MTU (maximum transmission unit)
+        :param chunk_size: length of a chunk, should be less than the MTU (maximum transmission unit)
         :param kwargs: additional fields that will be included in the log message, e.g. application name.
                        Each additional field should start with underscore, e.g. _app_name
         """
