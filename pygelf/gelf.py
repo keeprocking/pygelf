@@ -3,6 +3,7 @@ import json
 import zlib
 import os
 import struct
+import socket
 
 
 _levels = {
@@ -21,6 +22,7 @@ def make(record, debug, additional_fields):
         'full_message': record.exc_text,
         'timestamp': record.created,
         'level': _levels[record.levelno],
+        'source': socket.getfqdn()
     }
     
     if debug:
