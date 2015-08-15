@@ -18,13 +18,13 @@ _levels = {
 def make(record, debug, additional_fields):
     gelf = {
         'version': '1.1',
-        'short_message': record.message,
+        'short_message': record.msg,
         'full_message': record.exc_text,
         'timestamp': record.created,
         'level': _levels[record.levelno],
         'source': socket.getfqdn()
     }
-    
+
     if debug:
         gelf.update({
             '_file': record.filename,
