@@ -2,7 +2,7 @@ Get pygelf
 ==========
 ::
 
-    pip install gelf
+    pip install pygelf
 
 Usage
 =====
