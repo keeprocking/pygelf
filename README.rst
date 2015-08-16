@@ -1,3 +1,9 @@
+Get pygelf
+==========
+::
+
+    pip install gelf
+
 Usage
 =====
 ::
