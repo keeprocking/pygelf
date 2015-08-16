@@ -2,7 +2,7 @@ from setuptools import setup
 
 
 setup(
-    name='pygelf',
+    name='gelf',
     version='0.1',
     packages=['pygelf'],
     description="Python logging implementation of GELF (graylog extended log format)",
