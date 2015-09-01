@@ -7,7 +7,7 @@ import sys
 
 class GelfTlsHandler(GelfTcpHandler):
 
-    def __init__(self, cert, **kwargs):
+    def __init__(self, cert=None, **kwargs):
         super(GelfTlsHandler, self).__init__(**kwargs)
         self.cert = cert
 
@@ -17,7 +17,10 @@ class GelfTlsHandler(GelfTcpHandler):
             s.settimeout(timeout)
 
         try:
-            wrapped_socket = ssl.wrap_socket(s, ca_certs=self.cert, cert_reqs=ssl.CERT_REQUIRED)
+            if self.cert is None:
+                wrapped_socket = ssl.wrap_socket(s)
+            else:
+                wrapped_socket = ssl.wrap_socket(s, ca_certs=self.cert, cert_reqs=ssl.CERT_REQUIRED)
             wrapped_socket.connect((self.host, self.port))
             return wrapped_socket
         except Exception as e:
