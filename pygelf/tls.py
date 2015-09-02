@@ -7,9 +7,14 @@ import sys
 
 class GelfTlsHandler(GelfTcpHandler):
 
-    def __init__(self, cert=None, **kwargs):
+    def __init__(self, validate=False, ca_certs=None, **kwargs):
         super(GelfTlsHandler, self).__init__(**kwargs)
-        self.cert = cert
+
+        if validate and ca_certs is None:
+            raise ValueError('CA bundle file path must be specified')
+
+        self.ca_certs = ca_certs
+        self.reqs = ssl.CERT_REQUIRED if validate else ssl.CERT_NONE
 
     def makeSocket(self, timeout=1):
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -17,10 +22,7 @@ class GelfTlsHandler(GelfTcpHandler):
             s.settimeout(timeout)
 
         try:
-            if self.cert is None:
-                wrapped_socket = ssl.wrap_socket(s)
-            else:
-                wrapped_socket = ssl.wrap_socket(s, ca_certs=self.cert, cert_reqs=ssl.CERT_REQUIRED)
+            wrapped_socket = ssl.wrap_socket(s, ca_certs=self.ca_certs, cert_reqs=self.reqs)
             wrapped_socket.connect((self.host, self.port))
             return wrapped_socket
         except Exception as e:
