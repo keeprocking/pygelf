@@ -8,19 +8,21 @@ Usage
 =====
 ::
 
-    from pygelf import GelfTcpHandler, GelfUdpHandler
+    from pygelf import GelfTcpHandler, GelfUdpHandler, GelfTlsHandler
     import logging
 
 
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger()
-    logger.addHandler(GelfTcpHandler('127.0.0.1', 9401))
-    logger.addHandler(GelfUdpHandler('127.0.0.1', 9402))
+    logger.addHandler(GelfTcpHandler(host='127.0.0.1', port=9401, compress=False))
+    logger.addHandler(GelfUdpHandler(host='127.0.0.1', port=9402, debug=True, chunk_size=1350))
+    logger.addHandler(GelfTlsHandler(host='127.0.0.1', port=9403, validate=True, ca_certs='/etc/ssl/certs/ca-ceritficates.crt'))
 
     logging.info('hello gelf')
 
 Configuration
 =============
+
 
 Each handler has the following parameters:
 
@@ -29,9 +31,18 @@ Each handler has the following parameters:
 - **debug** (false by default): if true, each log message will include debugging info: module name, file name, line number, method name
 - **compress** (true by default): if true, compress log messages before send them to the server
 
-In addition, UDP handler has one extra field:
+In addition UDP and TLS handlers have some specific parameters.
 
-- **chunk\_size** (1300 by default) - maximum length of the message. If log length exceeds this value, it splits into multiple chunks (see https://www.graylog.org/resources/gelf-2/ section "chunked GELF") with the length equals to this value. This parameter must be less than the `MTU <https: en.wikipedia.org="" wiki="" maximum_transmission_unit="">`__. If the logs don't seem to be delivered, try to reduce this value.
+UDP:
+
+- **chunk\_size** (1300 by default) - maximum length of the message. If log length exceeds this value, it splits into multiple chunks (see https://www.graylog.org/resources/gelf-2/ section "chunked GELF") with the length equals to this value. This parameter must be less than the MTU_. If the logs don't seem to be delivered, try to reduce this value.
+
+.. _MTU: https://en.wikipedia.org/wiki/Maximum_transmission_unit
+
+TLS:
+
+- **validate** (false by default) - if true, validate server certificate. If server provides a certificate that doesn't exist in **ca_certs**, you won't be able to send logs over TLS
+- **ca_certs** (none by default) - path to CA bundle file. This parameter is required if **validate** is true.
 
 Additional fields
 =================
@@ -42,7 +53,7 @@ Example:
 
 ::
 
-    handler = GelfUdpHandler('127.0.0.1', 9402, _app_name='pygelf', _something=11)
+    handler = GelfUdpHandler(host='127.0.0.1', port=9402, _app_name='pygelf', _something=11)
     logger.addHandler(handler)
 
 Or using kwargs:
@@ -55,6 +66,5 @@ Or using kwargs:
         '_something': 11
     }
     
-    handler = GelfUdpHandler('127.0.0.1', 9402, **fields)
+    handler = GelfUdpHandler(host='127.0.0.1', port=9402, **fields)
     logger.addHandler(handler)
-

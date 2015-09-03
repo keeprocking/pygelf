@@ -6,6 +6,12 @@ import sys
 
 
 class GelfTlsHandler(GelfTcpHandler):
+    """
+    TCP GELF logging handler with TLS support
+
+    :param validate: if true, validate server certificate. In that case ca_certs are required.
+    :param ca_certs: path to CA bundle file. For instance, on CentOS it would be '/etc/pki/tls/certs/ca-bundle.crt'
+    """
 
     def __init__(self, validate=False, ca_certs=None, **kwargs):
         super(GelfTlsHandler, self).__init__(**kwargs)
