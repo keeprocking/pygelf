@@ -6,6 +6,9 @@ Get pygelf
 
 Usage
 =====
+
+Currently TCP, UDP and TLS (encrypted TCP) handlers are supported.
+
 ::
 
     from pygelf import GelfTcpHandler, GelfUdpHandler, GelfTlsHandler
