@@ -38,7 +38,7 @@ In addition UDP and TLS handlers have some specific parameters.
 
 UDP:
 
-- **chunk\_size** (1300 by default) - maximum length of the message. If log length exceeds this value, it splits into multiple chunks (see https://www.graylog.org/resources/gelf-2/ section "chunked GELF") with the length equals to this value. This parameter must be less than the MTU_. If the logs don't seem to be delivered, try to reduce this value.
+- **chunk\_size** (1300 by default) - maximum length of the message. If log length exceeds this value, it splits into multiple chunks (see https://www.graylog.org/resources/gelf/ section "chunked GELF") with the length equals to this value. This parameter must be less than the MTU_. If the logs don't seem to be delivered, try to reduce this value.
 
 .. _MTU: https://en.wikipedia.org/wiki/Maximum_transmission_unit
 
@@ -50,7 +50,7 @@ TLS:
 Additional fields
 =================
 
-If you need to include some static fields into your logs, simply pass them to the constructor of the handler. Each additional field shoud start with underscore. You can't add field '\_id' as well.
+If you need to include some static fields into your logs, simply pass them to the constructor of the handler. Each additional field shoud start with underscore. You can't add field '\_id'.
 
 Example:
 
@@ -71,3 +71,4 @@ Or using kwargs:
     
     handler = GelfUdpHandler(host='127.0.0.1', port=9402, **fields)
     logger.addHandler(handler)
+
