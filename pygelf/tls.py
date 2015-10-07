@@ -1,8 +1,6 @@
-from __future__ import print_function
 from pygelf.tcp import GelfTcpHandler
 import ssl
 import socket
-import sys
 
 
 class GelfTlsHandler(GelfTcpHandler):
@@ -27,9 +25,6 @@ class GelfTlsHandler(GelfTcpHandler):
         if hasattr(s, 'settimeout'):
             s.settimeout(timeout)
 
-        try:
-            wrapped_socket = ssl.wrap_socket(s, ca_certs=self.ca_certs, cert_reqs=self.reqs)
-            wrapped_socket.connect((self.host, self.port))
-            return wrapped_socket
-        except Exception as e:
-            print('SSL socket exception:', e, file=sys.stderr)
+        wrapped_socket = ssl.wrap_socket(s, ca_certs=self.ca_certs, cert_reqs=self.reqs)
+        wrapped_socket.connect((self.host, self.port))
+        return wrapped_socket

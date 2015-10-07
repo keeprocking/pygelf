@@ -18,7 +18,7 @@ _levels = {
 def make(record, debug, additional_fields):
     gelf = {
         'version': '1.1',
-        'short_message': record.msg,
+        'short_message': record.msg % record.args,
         'full_message': record.exc_text,
         'timestamp': record.created,
         'level': _levels[record.levelno],
