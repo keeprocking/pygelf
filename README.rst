@@ -1,6 +1,6 @@
 Get pygelf
 ==========
-::
+.. code:: python
 
     pip install pygelf
 
@@ -9,7 +9,7 @@ Usage
 
 Currently TCP, UDP and TLS (encrypted TCP) handlers are supported.
 
-::
+.. code:: python
 
     from pygelf import GelfTcpHandler, GelfUdpHandler, GelfTlsHandler
     import logging
@@ -54,14 +54,14 @@ If you need to include some static fields into your logs, simply pass them to th
 
 Example:
 
-::
+.. code:: python
 
     handler = GelfUdpHandler(host='127.0.0.1', port=9402, _app_name='pygelf', _something=11)
     logger.addHandler(handler)
 
 Or using kwargs:
 
-::
+.. code:: python
 
     fields = {
         '_app_name': 'gelf_test',
