@@ -39,7 +39,7 @@ def make(record, debug, additional_fields):
     return gelf
 
 
-def pack(gelf, compress):
+def pack(gelf, compress=False):
     packed = json.dumps(gelf).encode('utf8')
     return zlib.compress(packed) if compress else packed
 

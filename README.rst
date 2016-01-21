@@ -32,13 +32,13 @@ Each handler has the following parameters:
 - **host**: ip address of the GELF input
 - **port**: port of the GELF input
 - **debug** (false by default): if true, each log message will include debugging info: module name, file name, line number, method name
-- **compress** (true by default): if true, compress log messages before send them to the server
 
 In addition UDP and TLS handlers have some specific parameters.
 
 UDP:
 
 - **chunk\_size** (1300 by default) - maximum length of the message. If log length exceeds this value, it splits into multiple chunks (see https://www.graylog.org/resources/gelf/ section "chunked GELF") with the length equals to this value. This parameter must be less than the MTU_. If the logs don't seem to be delivered, try to reduce this value.
+- **compress** (true by default): if true, compress log messages before send them to the server
 
 .. _MTU: https://en.wikipedia.org/wiki/Maximum_transmission_unit
 
