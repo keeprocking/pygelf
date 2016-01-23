@@ -17,8 +17,8 @@ Currently TCP, UDP and TLS (encrypted TCP) handlers are supported.
 
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger()
-    logger.addHandler(GelfTcpHandler(host='127.0.0.1', port=9401, compress=False))
-    logger.addHandler(GelfUdpHandler(host='127.0.0.1', port=9402, debug=True, chunk_size=1350))
+    logger.addHandler(GelfTcpHandler(host='127.0.0.1', port=9401, debug=True))
+    logger.addHandler(GelfUdpHandler(host='127.0.0.1', port=9402, compress=True, chunk_size=1350))
     logger.addHandler(GelfTlsHandler(host='127.0.0.1', port=9403, validate=True, ca_certs='/etc/ssl/certs/ca-ceritficates.crt'))
 
     logging.info('hello gelf')
