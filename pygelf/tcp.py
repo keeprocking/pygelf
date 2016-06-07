@@ -15,10 +15,23 @@ class GelfTcpHandler(SocketHandler):
                        Each additional field should start with underscore, e.g. _app_name
         """
 
-        super(GelfTcpHandler, self).__init__(host, port)
-        self.additional_fields = kwargs
-        self.debug = debug
-        self.additional_fields.pop('_id', None)
+        if sys.version_info[0] == 3:
+                super(GelfTcpHandler, self).__init__(host, port)
+                self.additional_fields = kwargs
+                self.debug = debug
+                self.additional_fields.pop('_id', None)
+        elif sys.version_info[0] == 2 and sys.version_info[1] >= 7:
+                super(GelfTcpHandler, self).__init__(host, port)
+                self.additional_fields = kwargs
+                self.debug = debug
+                self.additional_fields.pop('_id', None)
+        elif sys.version_info[0] == 2 and sys.version_info[1] == 6:
+                SocketHandler.__init__(self, host, port)
+                self.additional_fields = kwargs
+                self.debug = debug
+                self.additional_fields.pop('_id', None)
+        elif sys.version_info[0] == 2 and sys.version_info[1] <= 6:
+                raise Exception("Needs python 2.6 or higher")
 
     def makePickle(self, record):
         message = gelf.make(record, self.debug, self.additional_fields)
