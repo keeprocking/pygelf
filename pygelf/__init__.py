@@ -1,3 +1,1 @@
-from .tcp import GelfTcpHandler
-from .udp import GelfUdpHandler
-from .tls import GelfTlsHandler
+from .handlers import GelfTcpHandler, GelfUdpHandler, GelfTlsHandler
