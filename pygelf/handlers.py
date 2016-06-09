@@ -48,8 +48,8 @@ class GelfUdpHandler(BaseHandler, DatagramHandler):
         If message length exceeds chunk_size, the message splits into multiple chunks.
         The number of chunks must be less than 128.
 
-        :param host: gelf tcp input host
-        :param port: gelf tcp input port
+        :param host: gelf udp input host
+        :param port: gelf udp input port
         :param compress: compress message before send it to the server or not
         :param chunk_size: length of a chunk, should be less than the MTU (maximum transmission unit)
         """
