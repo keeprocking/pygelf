@@ -7,7 +7,7 @@ import socket
 class BaseHandler(object):
     def __init__(self, debug=False, **kwargs):
         """
-        Logging handler that transforms each record into GELF (graylog extended log format) and sends it over tcp.
+        Logging handler that transforms each record into GELF (graylog extended log format) and sends it over TCP.
 
         :param debug: include debug fields, e.g. line number, or not
         :param kwargs: additional fields that will be included in the log message, e.g. application name.
@@ -23,10 +23,10 @@ class GelfTcpHandler(BaseHandler, SocketHandler):
 
     def __init__(self, host, port, **kwargs):
         """
-        Logging handler that transforms each record into GELF (graylog extended log format) and sends it over tcp.
+        Logging handler that transforms each record into GELF (graylog extended log format) and sends it over TCP.
 
-        :param host: gelf tcp input host
-        :param port: gelf tcp input port
+        :param host: GELF TCP input host
+        :param port: GELF TCP input port
         """
 
         SocketHandler.__init__(self, host, port)
@@ -44,12 +44,12 @@ class GelfUdpHandler(BaseHandler, DatagramHandler):
 
     def __init__(self, host, port, compress=True, chunk_size=1300, **kwargs):
         """
-        Logging handler that transforms each record into GELF (graylog extended log format) and sends it over udp.
+        Logging handler that transforms each record into GELF (graylog extended log format) and sends it over UDP.
         If message length exceeds chunk_size, the message splits into multiple chunks.
         The number of chunks must be less than 128.
 
-        :param host: gelf udp input host
-        :param port: gelf udp input port
+        :param host: GELF UDP input host
+        :param port: GELF UDP input port
         :param compress: compress message before send it to the server or not
         :param chunk_size: length of a chunk, should be less than the MTU (maximum transmission unit)
         """
