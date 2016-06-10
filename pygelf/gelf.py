@@ -4,6 +4,7 @@ import zlib
 import os
 import struct
 import socket
+import traceback
 
 
 _levels = {
@@ -16,10 +17,14 @@ _levels = {
 
 
 def make(record, debug, additional_fields):
+    stack_trace = None
+    if record.exc_info is not None:
+        stack_trace = '\n'.join(traceback.format_exception(*record.exc_info))
+
     gelf = {
         'version': '1.1',
-        'short_message': record.msg % record.args,
-        'full_message': record.exc_text,
+        'short_message': record.getMessage(),
+        'full_message': stack_trace,
         'timestamp': record.created,
         'level': _levels[record.levelno],
         'source': socket.getfqdn()

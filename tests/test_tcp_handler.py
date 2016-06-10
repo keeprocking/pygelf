@@ -5,9 +5,16 @@ import pytest
 import mock
 
 
+ADDITIONAL_FIELDS = {
+    '_ozzy': 'diary of a madman',
+    '_van_halen': 1984,
+    '_id': '123'
+}
+
+
 @pytest.fixture
 def handler():
-    return GelfTcpHandler(host='127.0.0.1', port=12000, debug=True)
+    return GelfTcpHandler(host='127.0.0.1', port=12000, debug=True, **ADDITIONAL_FIELDS)
 
 
 @pytest.yield_fixture
@@ -23,10 +30,42 @@ def logger(handler):
     yield logger
 
 
-def decode_send_result(send_result):
-    assert send_result.call_args is not None
+def log_and_decode(text, _logger, _send, *args):
+    _logger.exception(text) if isinstance(text, Exception) else _logger.warning(text, *args)
+    message = _send.call_args[0][0][:-1].decode('utf-8')
+    return json.loads(message)
 
-    message = send_result.call_args[0][0].decode('utf-8')
+
+def test_null_character(logger, send):
+    logger.warning('null termination')
+    message = send.call_args[0][0].decode('utf-8')
     assert message[-1] == '\x00'
 
-    return json.loads(message[:-1])
+
+def test_simple_message(logger, send):
+    message = log_and_decode('hello gelf', logger, send)
+    assert message['short_message'] == 'hello gelf'
+    assert message['full_message'] is None
+
+
+def test_full_message(logger, send):
+    try:
+        raise Exception('something went wrong')
+    except Exception as e:
+        message = log_and_decode(e, logger, send)
+        assert message['short_message'] == 'something went wrong'
+        assert 'Traceback (most recent call last)' in message['full_message']
+        assert 'Exception: something went wrong' in message['full_message']
+
+
+def test_formatted_message(logger, send):
+    message = log_and_decode('%s %s', logger, send, 'hello', 'gelf')
+    assert message['short_message'] == 'hello gelf'
+
+
+def test_additional_fields(logger, send):
+    message = log_and_decode('hello gelf', logger, send)
+    assert '_id' not in message
+    for k, v in ADDITIONAL_FIELDS.items():
+        if k != '_id':
+            assert message[k] == v
