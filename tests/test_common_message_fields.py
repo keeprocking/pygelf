@@ -14,8 +14,8 @@ ADDITIONAL_FIELDS = {
 
 @pytest.fixture(params=[
     GelfTcpHandler(host='127.0.0.1', port=12000, **ADDITIONAL_FIELDS),
-    GelfUdpHandler(host='127.0.0.1', port=12001, compress=False, **ADDITIONAL_FIELDS),
-    GelfTlsHandler(host='127.0.0.1', port=12002, **ADDITIONAL_FIELDS)
+    GelfUdpHandler(host='127.0.0.1', port=12000, compress=False, **ADDITIONAL_FIELDS),
+    GelfTlsHandler(host='127.0.0.1', port=12000, **ADDITIONAL_FIELDS)
 ])
 def handler(request):
     return request.param
