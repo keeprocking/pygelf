@@ -67,3 +67,8 @@ def test_additional_fields(logger, send):
     for k, v in ADDITIONAL_FIELDS.items():
         if k != '_id':
             assert message[k] == v
+
+
+def test_default_version(logger, send):
+    message = log_and_decode(logger, send, 'default version')
+    assert message['version'] == '1.1'

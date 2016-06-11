@@ -16,13 +16,13 @@ _levels = {
 }
 
 
-def make(record, debug, additional_fields):
+def make(record, debug, version, additional_fields):
     stack_trace = None
     if record.exc_info is not None:
         stack_trace = '\n'.join(traceback.format_exception(*record.exc_info))
 
     gelf = {
-        'version': '1.1',
+        'version': version,
         'short_message': record.getMessage(),
         'full_message': stack_trace,
         'timestamp': record.created,

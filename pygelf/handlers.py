@@ -5,7 +5,7 @@ import socket
 
 
 class BaseHandler(object):
-    def __init__(self, debug=False, **kwargs):
+    def __init__(self, debug=False, version='1.1', **kwargs):
         """
         Logging handler that transforms each record into GELF (graylog extended log format) and sends it over TCP.
 
@@ -15,6 +15,7 @@ class BaseHandler(object):
         """
 
         self.debug = debug
+        self.version = version
         self.additional_fields = kwargs
         self.additional_fields.pop('_id', None)
 
@@ -33,7 +34,7 @@ class GelfTcpHandler(BaseHandler, SocketHandler):
         BaseHandler.__init__(self, **kwargs)
 
     def makePickle(self, record):
-        message = gelf.make(record, self.debug, self.additional_fields)
+        message = gelf.make(record, self.debug, self.version, self.additional_fields)
         packed = gelf.pack(message)
 
         """ if you send the message over tcp, it should always be null terminated or the input will reject it """
@@ -69,7 +70,7 @@ class GelfUdpHandler(BaseHandler, DatagramHandler):
                 DatagramHandler.send(self, chunk)
 
     def makePickle(self, record):
-        message = gelf.make(record, self.debug, self.additional_fields)
+        message = gelf.make(record, self.debug, self.version, self.additional_fields)
         packed = gelf.pack(message, self.compress)
         return packed
 
