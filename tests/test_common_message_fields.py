@@ -32,6 +32,7 @@ def logger(handler):
     logger = logging.getLogger('test')
     logger.addHandler(handler)
     yield logger
+    logger.removeHandler(handler)
 
 
 def log_and_decode(_logger, _send, text, *args):
