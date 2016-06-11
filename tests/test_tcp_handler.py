@@ -23,7 +23,7 @@ def logger(handler):
     logger.removeHandler(handler)
 
 
-def test_null_character(logger, send):
-    logger.warning('null termination')
+def test_ending_null_character(logger, send):
+    logger.warning('null terminated message')
     message = send.call_args[0][0].decode('utf-8')
     assert message[-1] == '\x00'
