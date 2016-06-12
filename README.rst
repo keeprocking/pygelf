@@ -1,3 +1,15 @@
+pygelf
+======
+
+.. image:: https://travis-ci.org/keeprocking/pygelf.svg?branch=master
+    :target: https://travis-ci.org/keeprocking/pygelf
+
+pygelf allows to send logs into Graylog directly from your app using built-in logging module.
+
+Each log message is transformed into GELF (Graylog Extended Log Format).
+
+Currently TCP, UDP and TLS (encrypted TCP) logging handlers are supported.
+
 Get pygelf
 ==========
 .. code:: python
@@ -6,8 +18,6 @@ Get pygelf
 
 Usage
 =====
-
-Currently TCP, UDP and TLS (encrypted TCP) handlers are supported.
 
 .. code:: python
 
@@ -59,4 +69,22 @@ Example:
 
     handler = GelfUdpHandler(host='127.0.0.1', port=9402, _app_name='pygelf', _something=11)
     logger.addHandler(handler)
+
+Running tests
+=============
+
+To run tests, you'll need tox_. After installing, simply run it:
+
+.. code::
+
+    tox
+
+You can also specify interpreter version. For example:
+
+.. code::
+
+    tox -e py26
+    tox -e py35
+
+.. _tox: https://pypi.python.org/pypi/tox
 
