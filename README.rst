@@ -32,6 +32,7 @@ Each handler has the following parameters:
 - **host**: ip address of the GELF input
 - **port**: port of the GELF input
 - **debug** (false by default): if true, each log message will include debugging info: module name, file name, line number, method name
+- **version** ('1.1' by default): GELF protocol version, can be overridden by a client
 
 In addition UDP and TLS handlers have some specific parameters.
 
@@ -50,25 +51,12 @@ TLS:
 Additional fields
 =================
 
-If you need to include some static fields into your logs, simply pass them to the constructor of the handler. Each additional field shoud start with underscore. You can't add field '\_id'.
+If you need to include some static fields into your logs, simply pass them to the handler constructor. Each additional field shoud start with underscore. You can't add field '\_id'.
 
 Example:
 
 .. code:: python
 
     handler = GelfUdpHandler(host='127.0.0.1', port=9402, _app_name='pygelf', _something=11)
-    logger.addHandler(handler)
-
-Or using kwargs:
-
-.. code:: python
-
-    fields = {
-        '_app_name': 'gelf_test',
-        '_app_version': '1.5',
-        '_something': 11
-    }
-    
-    handler = GelfUdpHandler(host='127.0.0.1', port=9402, **fields)
     logger.addHandler(handler)
 
