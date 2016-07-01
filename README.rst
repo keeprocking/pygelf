@@ -43,6 +43,7 @@ Each handler has the following parameters:
 - **port**: port of the GELF input
 - **debug** (false by default): if true, each log message will include debugging info: module name, file name, line number, method name
 - **version** ('1.1' by default): GELF protocol version, can be overridden by a client
+- **extra_fields** (False by default): if true, each log message will include all the extra fields set to LogRecord
 
 In addition UDP and TLS handlers have some specific parameters.
 
