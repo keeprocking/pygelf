@@ -78,12 +78,12 @@ All the non-trivial fields of the record will be sent to graylog2 with '\_' adde
 
  Example:
 
- .. code-block:: python
+ .. code:: python
 
     class ContextFilter(logging.Filter):
 
         def filter(self, record):
-            record.job_id = threading.local().process_id # for example logging job_id of currently processed job
+            record.job_id = threading.local().process_id # logging job_id of currently processed job
             return True
 
     logger.addFilter(ContextFilter())
