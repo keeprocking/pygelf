@@ -70,6 +70,26 @@ Example:
     handler = GelfUdpHandler(host='127.0.0.1', port=9402, _app_name='pygelf', _something=11)
     logger.addHandler(handler)
 
+Extra fields
+============
+
+If you need to include some dynamic fields into your logs, add them to record by using LoggingAdapter or logging.Filter and create handler with extra_fields set to True.
+All the non-trivial fields of the record will be sent to graylog2 with '\_' added before the name
+
+ Example:
+
+ .. code-block:: python
+
+    class ContextFilter(logging.Filter):
+
+        def filter(self, record):
+            record.job_id = threading.local().process_id # for example logging job_id of currently processed job
+            return True
+
+    logger.addFilter(ContextFilter())
+    handler = GelfUdpHandler(host='127.0.0.1', port=9402, extra_fields=True)
+    logger.addHandler(handler)
+
 Running tests
 =============
 
