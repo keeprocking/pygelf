@@ -12,19 +12,12 @@ def send(extra_fields_handler):
 
 
 @pytest.fixture(params=[
-    GelfTcpHandler(host='127.0.0.1', port=12000, extra_fields=True),
-    GelfUdpHandler(host='127.0.0.1', port=12000, compress=False, extra_fields=True),
-    GelfTlsHandler(host='127.0.0.1', port=12000, extra_fields=True)
+    GelfTcpHandler(host='127.0.0.1', port=12000, include_extra_fields=True),
+    GelfUdpHandler(host='127.0.0.1', port=12000, compress=False, include_extra_fields=True),
+    GelfTlsHandler(host='127.0.0.1', port=12000, include_extra_fields=True)
 ])
 def extra_fields_handler(request):
     return request.param
-
-
-ADDITIONAL_FIELDS = {
-    '_ozzy': 'diary of a madman',
-    '_van_halen': 1984,
-    '_id': '123'
-}
 
 
 class ContextFilter(logging.Filter):
@@ -32,7 +25,6 @@ class ContextFilter(logging.Filter):
         record.ozzy = 'diary of a madman'
         record.van_halen = 1984
         record.id = 123
-
         return True
 
 
@@ -55,8 +47,14 @@ def log_and_decode(_logger, _send, text, *args):
 
 def test_extra_fields(extra_fields_logger, send):
     message = log_and_decode(extra_fields_logger, send, 'hello gelf')
-    assert '_id' not in message # same fields was set thru filter
-    for k, v in ADDITIONAL_FIELDS.items():
+    assert '_id' not in message  # same fields were set thru filter
+
+    expected = [
+        ('_ozzy', 'diary of a madman'),
+        ('_van_halen', 1984)
+    ]
+
+    for (k, v) in expected:
         if k != '_id':
             assert message[k] == v
 

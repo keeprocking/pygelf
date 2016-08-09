@@ -43,7 +43,7 @@ Each handler has the following parameters:
 - **port**: port of the GELF input
 - **debug** (false by default): if true, each log message will include debugging info: module name, file name, line number, method name
 - **version** ('1.1' by default): GELF protocol version, can be overridden by a client
-- **extra_fields** (False by default): if true, each log message will include all the extra fields set to LogRecord
+- **include_extra_fields** (False by default): if true, each log message will include all the extra fields set to LogRecord
 
 In addition UDP and TLS handlers have some specific parameters.
 
@@ -74,7 +74,7 @@ Example:
 Extra fields
 ============
 
-If you need to include some dynamic fields into your logs, add them to record by using LoggingAdapter or logging.Filter and create handler with extra_fields set to True.
+If you need to include some dynamic fields into your logs, add them to record by using LoggingAdapter or logging.Filter and create handler with include_extra_fields set to True.
 All the non-trivial fields of the record will be sent to graylog2 with '\_' added before the name
 
  Example:
@@ -88,7 +88,7 @@ All the non-trivial fields of the record will be sent to graylog2 with '\_' adde
             return True
 
     logger.addFilter(ContextFilter())
-    handler = GelfUdpHandler(host='127.0.0.1', port=9402, extra_fields=True)
+    handler = GelfUdpHandler(host='127.0.0.1', port=9402, include_extra_fields=True)
     logger.addHandler(handler)
 
 Running tests
