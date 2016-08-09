@@ -16,7 +16,7 @@ _levels = {
 }
 
 
-def make(record, debug, version, additional_fields):
+def make(record, debug, version, additional_fields, extra_fields = False):
     stack_trace = None
     if record.exc_info is not None:
         stack_trace = '\n'.join(traceback.format_exception(*record.exc_info))
@@ -41,7 +41,27 @@ def make(record, debug, version, additional_fields):
     if additional_fields is not None:
         gelf.update(additional_fields)
 
+    if extra_fields:
+        add_extra_fields(gelf, record)
+
     return gelf
+
+def add_extra_fields(message_dict, record):
+    # skip_list is used to filter additional fields in a log message.
+    # It contains all attributes listed in
+    # http://docs.python.org/library/logging.html#logrecord-attributes
+    # plus exc_text, which is only found in the logging module source,
+    # and id, which is prohibited by the GELF format.
+    skip_list = (
+        'args', 'asctime', 'created', 'exc_info',  'exc_text', 'filename',
+        'funcName', 'id', 'levelname', 'levelno', 'lineno', 'module',
+        'msecs', 'message', 'msg', 'name', 'pathname', 'process',
+        'processName', 'relativeCreated', 'thread', 'threadName')
+
+    for key, value in record.__dict__.items():
+        if key not in skip_list and not key.startswith('_'):
+            message_dict['_%s' % key] = value
+    return message_dict
 
 
 def pack(gelf, compress=False):

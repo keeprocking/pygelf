@@ -5,11 +5,12 @@ import socket
 
 
 class BaseHandler(object):
-    def __init__(self, debug=False, version='1.1', **kwargs):
+    def __init__(self, debug=False, version='1.1', extra_fields = False, **kwargs):
         """
         Logging handler that transforms each record into GELF (graylog extended log format) and sends it over TCP.
 
         :param debug: include debug fields, e.g. line number, or not
+        :param extra_fields: include non-default fields from record to message, or not
         :param kwargs: additional fields that will be included in the log message, e.g. application name.
                        Each additional field should start with underscore, e.g. _app_name
         """
@@ -17,6 +18,7 @@ class BaseHandler(object):
         self.debug = debug
         self.version = version
         self.additional_fields = kwargs
+        self.extra_fields = extra_fields
         self.additional_fields.pop('_id', None)
 
 
@@ -34,7 +36,7 @@ class GelfTcpHandler(BaseHandler, SocketHandler):
         BaseHandler.__init__(self, **kwargs)
 
     def makePickle(self, record):
-        message = gelf.make(record, self.debug, self.version, self.additional_fields)
+        message = gelf.make(record, self.debug, self.version, self.additional_fields, self.extra_fields)
         packed = gelf.pack(message)
 
         """ if you send the message over tcp, it should always be null terminated or the input will reject it """
@@ -70,7 +72,7 @@ class GelfUdpHandler(BaseHandler, DatagramHandler):
                 DatagramHandler.send(self, chunk)
 
     def makePickle(self, record):
-        message = gelf.make(record, self.debug, self.version, self.additional_fields)
+        message = gelf.make(record, self.debug, self.version, self.additional_fields, self.extra_fields)
         packed = gelf.pack(message, self.compress)
         return packed
 
