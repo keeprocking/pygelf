@@ -81,3 +81,4 @@ def test_source(logger, send):
     with mock.patch('socket.getfqdn', return_value='different_domain'):
         message = log_and_decode(logger, send, 'do not call socket.getfqdn() each time')
         assert message['source'] == original_source
+        assert message['host'] == original_source

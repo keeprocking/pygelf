@@ -39,7 +39,8 @@ def make(record, domain, debug, version, additional_fields, include_extra_fields
         'full_message': stack_trace,
         'timestamp': record.created,
         'level': _levels[record.levelno],
-        'source': domain
+        'source': domain,  # TODO: should be deprecated sooner or later
+        'host': domain
     }
 
     if debug:
