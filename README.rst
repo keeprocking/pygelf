@@ -4,9 +4,7 @@ pygelf
 .. image:: https://travis-ci.org/keeprocking/pygelf.svg?branch=master
     :target: https://travis-ci.org/keeprocking/pygelf
 
-pygelf allows to send logs into Graylog directly from your app using built-in logging module.
-
-Each log message is transformed into GELF (Graylog Extended Log Format).
+Python logging handlers with GELF (Graylog Extended Log Format) support.
 
 Currently TCP, UDP and TLS (encrypted TCP) logging handlers are supported.
 

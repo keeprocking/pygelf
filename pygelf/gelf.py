@@ -3,7 +3,6 @@ import json
 import zlib
 import os
 import struct
-import socket
 import traceback
 
 
@@ -29,7 +28,7 @@ _skip_list = (
 )
 
 
-def make(record, debug, version, additional_fields, include_extra_fields=False):
+def make(record, domain, debug, version, additional_fields, include_extra_fields=False):
     stack_trace = None
     if record.exc_info is not None:
         stack_trace = '\n'.join(traceback.format_exception(*record.exc_info))
@@ -40,7 +39,7 @@ def make(record, debug, version, additional_fields, include_extra_fields=False):
         'full_message': stack_trace,
         'timestamp': record.created,
         'level': _levels[record.levelno],
-        'source': socket.getfqdn()
+        'source': domain
     }
 
     if debug:

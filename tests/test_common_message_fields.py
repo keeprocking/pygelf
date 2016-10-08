@@ -3,6 +3,7 @@ import logging
 import json
 import pytest
 import mock
+import socket
 
 
 ADDITIONAL_FIELDS = {
@@ -73,3 +74,10 @@ def test_additional_fields(logger, send):
 def test_default_version(logger, send):
     message = log_and_decode(logger, send, 'default version')
     assert message['version'] == '1.1'
+
+
+def test_source(logger, send):
+    original_source = socket.getfqdn()
+    with mock.patch('socket.getfqdn', return_value='different_domain'):
+        message = log_and_decode(logger, send, 'do not call socket.getfqdn() each time')
+        assert message['source'] == original_source
