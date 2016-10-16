@@ -29,27 +29,22 @@ _skip_list = (
 
 
 def make(record, domain, debug, version, additional_fields, include_extra_fields=False):
-    stack_trace = None
-    if record.exc_info is not None:
-        stack_trace = '\n'.join(traceback.format_exception(*record.exc_info))
-
     gelf = {
         'version': version,
         'short_message': record.getMessage(),
-        'full_message': stack_trace,
         'timestamp': record.created,
         'level': _levels[record.levelno],
-        'source': domain,  # TODO: should be deprecated sooner or later
-        'host': domain
+        'source': domain
     }
 
+    if record.exc_info is not None:
+        gelf['full_message'] = '\n'.join(traceback.format_exception(*record.exc_info))
+
     if debug:
-        gelf.update({
-            '_file': record.filename,
-            '_line': record.lineno,
-            '_module': record.module,
-            '_func': record.funcName
-        })
+        gelf['_file'] = record.filename
+        gelf['_line'] = record.lineno
+        gelf['_module'] = record.module
+        gelf['_func'] = record.funcName
 
     if additional_fields is not None:
         gelf.update(additional_fields)

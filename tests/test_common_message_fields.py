@@ -45,7 +45,7 @@ def log_and_decode(_logger, _send, text, *args):
 def test_simple_message(logger, send):
     message = log_and_decode(logger, send, 'hello gelf')
     assert message['short_message'] == 'hello gelf'
-    assert message['full_message'] is None
+    assert 'full_message' not in message
 
 
 def test_full_message(logger, send):
@@ -81,4 +81,3 @@ def test_source(logger, send):
     with mock.patch('socket.getfqdn', return_value='different_domain'):
         message = log_and_decode(logger, send, 'do not call socket.getfqdn() each time')
         assert message['source'] == original_source
-        assert message['host'] == original_source
