@@ -37,7 +37,7 @@ Message structure
 According to the GELF spec, each message has the following mandatory fields:
 
 - **version**: '1.1', can be overridden when creating a logger
-- **short_message**: the log record itself
+- **short_message**: the log message itself
 - **timestamp**: current timestamp
 - **level**: log level (debug, warning, etc.)
 - **source**: FQDN_ of the machine that sent the message
