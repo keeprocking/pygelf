@@ -52,6 +52,13 @@ According to the GELF spec, each message has the following mandatory fields:
 
 .. _FQDN: https://en.wikipedia.org/wiki/Fully_qualified_domain_name
 
+In debug mode (when handler was created with debug=True option) each message contains some extra fields (which are pretty self-explanatory): 
+
+- **_file**
+- **_line**
+- **_module**
+- **_func**
+
 Configuration
 =============
 
@@ -77,8 +84,8 @@ TLS:
 - **validate** (False by default) - if true, validate server certificate. If server provides a certificate that doesn't exist in **ca_certs**, you won't be able to send logs over TLS
 - **ca_certs** (None by default) - path to CA bundle file. This parameter is required if **validate** is true.
 
-Additional fields
-=================
+Static fields
+=============
 
 If you need to include some static fields into your logs, simply pass them to the handler constructor. Each additional field shoud start with underscore. You can't add field '\_id'.
 
@@ -89,8 +96,8 @@ Example:
     handler = GelfUdpHandler(host='127.0.0.1', port=9402, _app_name='pygelf', _something=11)
     logger.addHandler(handler)
 
-Extra fields
-============
+Dynamic fields
+==============
 
 If you need to include some dynamic fields into your logs, add them to record by using LoggingAdapter or logging.Filter and create handler with include_extra_fields set to True.
 All the non-trivial fields of the record will be sent to graylog2 with '\_' added before the name
