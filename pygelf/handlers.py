@@ -80,21 +80,30 @@ class GelfUdpHandler(BaseHandler, DatagramHandler):
 
 class GelfTlsHandler(GelfTcpHandler):
 
-    def __init__(self, validate=False, ca_certs=None, **kwargs):
+    def __init__(self, validate=False, ca_certs=None, certfile=None, keyfile=None, **kwargs):
         """
         TCP GELF logging handler with TLS support
 
         :param validate: if true, validate server certificate. In that case ca_certs are required.
         :param ca_certs: path to CA bundle file. For instance, on CentOS it would be '/etc/pki/tls/certs/ca-bundle.crt'
+        :param certfile: path to the certificate file that is used to identify ourselves to the server.
+        :param keyfile: path to the private key. If the private key is stored with the certificate this parameter can be ignored.
         """
 
         if validate and ca_certs is None:
             raise ValueError('CA bundle file path must be specified')
 
+        if keyfile and not certfile:
+            raise ValueError('certfile must be specified')
+
         GelfTcpHandler.__init__(self, **kwargs)
 
         self.ca_certs = ca_certs
         self.reqs = ssl.CERT_REQUIRED if validate else ssl.CERT_NONE
+
+        self.certfile = certfile
+        # Assume that if no keyfile was supplied, the private key it's in the certfile
+        self.keyfile = keyfile or certfile
 
     def makeSocket(self, timeout=1):
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -102,7 +111,8 @@ class GelfTlsHandler(GelfTcpHandler):
         if hasattr(s, 'settimeout'):
             s.settimeout(timeout)
 
-        wrapped_socket = ssl.wrap_socket(s, ca_certs=self.ca_certs, cert_reqs=self.reqs)
+        wrapped_socket = ssl.wrap_socket(s, keyfile=self.keyfile, certfile=self.certfile,
+                                         ca_certs=self.ca_certs, cert_reqs=self.reqs)
         wrapped_socket.connect((self.host, self.port))
 
         return wrapped_socket
