@@ -93,7 +93,7 @@ class GelfTlsHandler(GelfTcpHandler):
         if validate and ca_certs is None:
             raise ValueError('CA bundle file path must be specified')
 
-        if keyfile and not certfile:
+        if keyfile is not None and certfile is None:
             raise ValueError('certfile must be specified')
 
         GelfTcpHandler.__init__(self, **kwargs)
