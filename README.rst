@@ -83,6 +83,8 @@ TLS:
 
 - **validate** (False by default) - if true, validate server certificate. If server provides a certificate that doesn't exist in **ca_certs**, you won't be able to send logs over TLS
 - **ca_certs** (None by default) - path to CA bundle file. This parameter is required if **validate** is true.
+- **certfile** (None by default) - path to certificate file that will be used to identify ourselves to the remote endpoint. This is necessary when the remote server has client authentication required. If **certfile** contains the private key, it should be placed before the certificate.
+- **keyfile** (None by default) - path to the private key. If the private key is stored in **certfile** this parameter can be None.
 
 Static fields
 =============
