@@ -30,7 +30,7 @@ Usage
     logger = logging.getLogger()
     logger.addHandler(GelfTcpHandler(host='127.0.0.1', port=9401, debug=True))
     logger.addHandler(GelfUdpHandler(host='127.0.0.1', port=9402, compress=True, chunk_size=1350))
-    logger.addHandler(GelfTlsHandler(host='127.0.0.1', port=9403, validate=True, ca_certs='/etc/ssl/certs/ca-ceritficates.crt'))
+    logger.addHandler(GelfTlsHandler(host='127.0.0.1', port=9403, validate=True, ca_certs='/etc/ssl/certs/ca-certificates.crt'))
 
     logging.info('hello gelf')
 
@@ -92,7 +92,7 @@ TLS:
 Static fields
 =============
 
-If you need to include some static fields into your logs, simply pass them to the handler constructor. Each additional field shoud start with underscore. You can't add field '\_id'.
+If you need to include some static fields into your logs, simply pass them to the handler constructor. Each additional field should start with underscore. You can't add field '\_id'.
 
 Example:
 
