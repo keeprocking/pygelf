@@ -45,6 +45,7 @@ def make(record, domain, debug, version, additional_fields, include_extra_fields
         gelf['_line'] = record.lineno
         gelf['_module'] = record.module
         gelf['_func'] = record.funcName
+        gelf['_logger_name'] = record.name
 
     if additional_fields is not None:
         gelf.update(additional_fields)

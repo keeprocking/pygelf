@@ -16,7 +16,7 @@ ADDITIONAL_FIELDS = {
 @pytest.fixture(params=[
     GelfTcpHandler(host='127.0.0.1', port=12000, **ADDITIONAL_FIELDS),
     GelfUdpHandler(host='127.0.0.1', port=12000, compress=False, **ADDITIONAL_FIELDS),
-    GelfTlsHandler(host='127.0.0.1', port=12000, **ADDITIONAL_FIELDS)
+    GelfTlsHandler(host='127.0.0.1', port=12000, debug=True, **ADDITIONAL_FIELDS)
 ])
 def handler(request):
     return request.param
@@ -81,3 +81,21 @@ def test_source(logger, send):
     with mock.patch('socket.getfqdn', return_value='different_domain'):
         message = log_and_decode(logger, send, 'do not call socket.getfqdn() each time')
         assert message['source'] == original_source
+
+
+def test_debug_fields(logger, handler, send):
+    message = log_and_decode(logger, send, 'hello gelf')
+
+    debug_fields = {
+        '_line': 40,
+        '_file': 'test_common_message_fields.py',
+        '_module': 'test_common_message_fields',
+        '_func': 'log_and_decode',
+        '_logger_name': logger.name
+    }
+
+    for k, v in debug_fields.items():
+        if handler.debug:
+            assert message[k] == v
+        else:
+            assert k not in message

@@ -55,6 +55,5 @@ def test_extra_fields(extra_fields_logger, send):
     ]
 
     for (k, v) in expected:
-        if k != '_id':
-            assert message[k] == v
+        assert message[k] == v
 

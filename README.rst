@@ -61,6 +61,7 @@ In debug mode (when handler was created with debug=True option) each message con
 - **_line**
 - **_module**
 - **_func**
+- **_logger_name**
 
 Configuration
 =============
