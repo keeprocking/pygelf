@@ -3,7 +3,10 @@ from logging import Handler
 from pygelf import gelf
 import ssl
 import socket
-import httplib
+try:
+    import httplib
+except:
+    import http.client as httplib
 
 
 class BaseHandler(object):
