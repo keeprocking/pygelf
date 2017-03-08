@@ -1,23 +1,7 @@
 from pygelf import GelfTcpHandler, GelfUdpHandler, GelfTlsHandler
+from common import send, log_and_decode
 import logging
-import json
 import pytest
-import mock
-
-
-@pytest.yield_fixture
-def send(extra_fields_handler):
-    with mock.patch.object(extra_fields_handler, 'send') as mock_send:
-        yield mock_send
-
-
-@pytest.fixture(params=[
-    GelfTcpHandler(host='127.0.0.1', port=12000, include_extra_fields=True),
-    GelfUdpHandler(host='127.0.0.1', port=12000, compress=False, include_extra_fields=True),
-    GelfTlsHandler(host='127.0.0.1', port=12000, include_extra_fields=True)
-])
-def extra_fields_handler(request):
-    return request.param
 
 
 class ContextFilter(logging.Filter):
@@ -28,26 +12,30 @@ class ContextFilter(logging.Filter):
         return True
 
 
+@pytest.fixture(params=[
+    GelfTcpHandler(host='127.0.0.1', port=12000, include_extra_fields=True),
+    GelfUdpHandler(host='127.0.0.1', port=12000, compress=False, include_extra_fields=True),
+    GelfTlsHandler(host='127.0.0.1', port=12000, include_extra_fields=True)
+])
+def handler(request):
+    return request.param
+
+
 @pytest.yield_fixture
-def extra_fields_logger(extra_fields_handler):
-    extra_fields_logger = logging.getLogger('test')
+def logger(handler):
+    logger = logging.getLogger('test')
     context_filter = ContextFilter()
-    extra_fields_logger.addFilter(context_filter)
-    extra_fields_logger.addHandler(extra_fields_handler)
-    yield extra_fields_logger
-    extra_fields_logger.removeHandler(extra_fields_handler)
-    extra_fields_logger.removeFilter(context_filter)
+    logger.addFilter(context_filter)
+    logger.addHandler(handler)
+    yield logger
+    logger.removeHandler(handler)
+    logger.removeFilter(context_filter)
 
 
-def log_and_decode(_logger, _send, text, *args):
-    _logger.exception(text) if isinstance(text, Exception) else _logger.warning(text, *args)
-    message = _send.call_args[0][0].replace(b'\x00', b'').decode('utf-8')
-    return json.loads(message)
-
-
-def test_extra_fields(extra_fields_logger, send):
-    message = log_and_decode(extra_fields_logger, send, 'hello gelf')
-    assert '_id' not in message  # same fields were set thru filter
+def test_extra_fields(logger, send):
+    message = log_and_decode(logger, send, 'hello gelf')
+    
+    assert '_id' not in message
 
     expected = [
         ('_ozzy', 'diary of a madman'),

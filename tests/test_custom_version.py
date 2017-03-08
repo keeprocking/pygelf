@@ -1,14 +1,9 @@
 from pygelf import GelfTcpHandler, GelfUdpHandler, GelfTlsHandler
+from common import log_and_decode
 import logging
 import json
 import pytest
 import mock
-
-
-def log_and_decode(_logger, _send, text):
-    _logger.warning(text)
-    message = _send.call_args[0][0].replace(b'\x00', b'').decode('utf-8')
-    return json.loads(message)
 
 
 @pytest.mark.parametrize('handler,version', [

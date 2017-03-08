@@ -1,6 +1,5 @@
 from pygelf import GelfTcpHandler, GelfUdpHandler, GelfTlsHandler
-import logging
-import json
+from common import logger, send, log_and_decode
 import pytest
 import mock
 import socket
@@ -20,26 +19,6 @@ ADDITIONAL_FIELDS = {
 ])
 def handler(request):
     return request.param
-
-
-@pytest.yield_fixture
-def send(handler):
-    with mock.patch.object(handler, 'send') as mock_send:
-        yield mock_send
-
-
-@pytest.yield_fixture
-def logger(handler):
-    logger = logging.getLogger('test')
-    logger.addHandler(handler)
-    yield logger
-    logger.removeHandler(handler)
-
-
-def log_and_decode(_logger, _send, text, *args):
-    _logger.exception(text) if isinstance(text, Exception) else _logger.warning(text, *args)
-    message = _send.call_args[0][0].replace(b'\x00', b'').decode('utf-8')
-    return json.loads(message)
 
 
 def test_simple_message(logger, send):
@@ -87,9 +66,9 @@ def test_debug_fields(logger, handler, send):
     message = log_and_decode(logger, send, 'hello gelf')
 
     debug_fields = {
-        '_line': 40,
-        '_file': 'test_common_message_fields.py',
-        '_module': 'test_common_message_fields',
+        '_line': 22,
+        '_file': 'common.py',
+        '_module': 'common',
         '_func': 'log_and_decode',
         '_logger_name': logger.name
     }
