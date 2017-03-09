@@ -10,7 +10,7 @@ ADDITIONAL_FIELDS = {
     '_ozzy': 'diary of a madman',
     '_van_halen': 1984
 }
-API_URL = 'http://127.0.0.1:9000/api/search/universal/relative?query={}&range=5&fields=' \
+API_URL = 'http://127.0.0.1:9000/api/search/universal/relative?query={0}&range=5&fields=' \
     + '%2C'.join(('message', 'van_halen', 'ozzy', 'func', 'file', 'line', 'module', 'logger_name'))
 
 
