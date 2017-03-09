@@ -27,7 +27,7 @@ def handler(request):
     return request.param
 
 
-@pytest.mark.skipif(SKIP_TEST, reason='Do not run input test this time')
+@pytest.mark.skipif(SKIP_TEST, reason="Missing TEST_INPUTS env variable")
 def test_input(logger):
     unique_message = str(uuid.uuid4())
 
