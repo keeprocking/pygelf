@@ -3,7 +3,11 @@ from common import logger
 import uuid
 import requests
 import time
+import os
 import pytest
+
+
+SKIP_TEST = os.environ.get('TEST_INPUTS') is None
 
 
 ADDITIONAL_FIELDS = {
@@ -23,7 +27,7 @@ def handler(request):
     return request.param
 
 
-@pytest.mark.inputs
+@pytest.mark.skipif(SKIP_TEST, reason='Do not run input test this time')
 def test_input(logger):
     unique_message = str(uuid.uuid4())
 
