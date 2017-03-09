@@ -10,7 +10,8 @@ ADDITIONAL_FIELDS = {
     '_ozzy': 'diary of a madman',
     '_van_halen': 1984
 }
-API_URL = 'http://127.0.0.1:9000/api/search/universal/relative?query={}&range=5&fields=message%2Cvan_halen%2Cozzy'
+API_URL = 'http://127.0.0.1:9000/api/search/universal/relative?query={}&range=5&fields=' \
+    + '%2C'.join(('message', 'van_halen', 'ozzy', 'func', 'file', 'line', 'module', 'logger_name'))
 
 
 @pytest.fixture(params=[
@@ -20,6 +21,7 @@ API_URL = 'http://127.0.0.1:9000/api/search/universal/relative?query={}&range=5&
 ])
 def handler(request):
     return request.param
+
 
 @pytest.mark.inputs
 def test_input(logger):
@@ -38,6 +40,11 @@ def test_input(logger):
 
     message = messages[0]['message']
     assert message['message'] == unique_message
+    assert message['func'] == 'test_input'
+    assert message['file'] == 'test_inputs.py'
+    assert message['module'] == 'test_inputs'
+    assert message['logger_name'] == logger.name
+    assert 'line' in message
 
     for k, v in ADDITIONAL_FIELDS.items():
         assert message[k[1:]] == v
