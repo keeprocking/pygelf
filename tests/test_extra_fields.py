@@ -34,7 +34,7 @@ def logger(handler):
 
 def test_extra_fields(logger, send):
     message = log_and_decode(logger, send, 'hello gelf')
-    
+
     assert '_id' not in message
 
     expected = [
@@ -42,6 +42,6 @@ def test_extra_fields(logger, send):
         ('_van_halen', 1984)
     ]
 
-    for (k, v) in expected:
+    for k, v in expected:
         assert message[k] == v
 
