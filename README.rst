@@ -108,14 +108,14 @@ Dynamic fields
 If you need to include some dynamic fields into your logs, add them to record by using LoggingAdapter or logging.Filter and create handler with include_extra_fields set to True.
 All the non-trivial fields of the record will be sent to graylog2 with '\_' added before the name
 
- Example:
+Example:
 
- .. code:: python
+.. code:: python
 
     class ContextFilter(logging.Filter):
 
         def filter(self, record):
-            record.job_id = threading.local().process_id  # logging job_id of currently processed job
+            record.job_id = threading.local().process_id
             return True
 
     logger.addFilter(ContextFilter())
