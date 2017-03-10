@@ -1,7 +1,12 @@
 from logging.handlers import SocketHandler, DatagramHandler
+from logging import Handler
 from pygelf import gelf
 import ssl
 import socket
+try:
+    import httplib
+except:
+    import http.client as httplib
 
 
 class BaseHandler(object):
@@ -116,3 +121,44 @@ class GelfTlsHandler(GelfTcpHandler):
         wrapped_socket.connect((self.host, self.port))
 
         return wrapped_socket
+
+
+class GelfHttpHandler(BaseHandler, Handler):
+
+    def __init__(self, host, port, url='/gelf', timeout=5, **kwargs):
+        """
+        Logging handler that transforms each record into GELF (graylog extended log format) and sends it over HTTP.
+        If request returns a non-202 status, an exception is raised and handled by self.handleError
+
+        :param host:  GELF HTTP input IP
+        :param port:  GELF HTTP input Port
+        :param url: GELF HTTP input pattern. Default is '/gelp' as specified in the documentation (2.2)
+        """
+
+        Handler.__init__(self)
+        BaseHandler.__init__(self, **kwargs)
+
+        self.host = host
+        self.port = port
+        self.url = url
+        self.headers = {"Content-Type": "application/json"}
+        self.compress = False
+        self.timeout = timeout
+
+    def prepareLogRecord(self, record):
+        data = gelf.make(record, self.domain, self.debug, self.version, self.additional_fields, self.include_extra_fields)
+        return gelf.pack(data, self.compress)
+
+    def emit(self, record):
+
+        try:
+            data = self.prepareLogRecord(record)
+            http_conn = httplib.HTTPConnection(host=self.host, port=self.port, timeout=self.timeout)
+            http_conn.request("POST", self.url, data, self.headers)
+            response = http_conn.getresponse()
+
+            if response.status not in [202, "202"]:
+                raise Exception("GelfHttpHandler: response status {} is not the expected 202" % response.status)
+
+        except Exception:
+            self.handleError(record)
