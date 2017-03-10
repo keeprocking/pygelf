@@ -131,12 +131,4 @@ To run tests, you'll need tox_. After installing, simply run it:
 
     tox
 
-You can also specify interpreter version. For example:
-
-.. code::
-
-    tox -e py26
-    tox -e py35
-
 .. _tox: https://pypi.python.org/pypi/tox
-
