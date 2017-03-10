@@ -44,11 +44,10 @@ def test_input(logger):
 
     message = messages[0]['message']
     assert message['message'] == unique_message
+    assert message['ozzy'] == 'diary of a madman'
+    assert message['van_halen'] == 1984
     assert message['func'] == 'test_input'
     assert message['file'] == 'test_inputs.py'
     assert message['module'] == 'test_inputs'
     assert message['logger_name'] == logger.name
     assert 'line' in message
-
-    for k, v in ADDITIONAL_FIELDS.items():
-        assert message[k[1:]] == v
