@@ -76,10 +76,11 @@ class GelfUdpHandler(BaseHandler, DatagramHandler):
     def send(self, s):
         if len(s) <= self.chunk_size:
             DatagramHandler.send(self, s)
-        else:
-            chunks = gelf.split(s, self.chunk_size)
-            for chunk in chunks:
-                DatagramHandler.send(self, chunk)
+            return
+
+        chunks = gelf.split(s, self.chunk_size)
+        for chunk in chunks:
+            DatagramHandler.send(self, chunk)
 
     def makePickle(self, record):
         return self.convert_record_to_gelf(record)

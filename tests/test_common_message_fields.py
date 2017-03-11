@@ -1,4 +1,4 @@
-from pygelf import GelfTcpHandler, GelfUdpHandler, GelfTlsHandler, GelfHttpHandler
+from pygelf import GelfTcpHandler, GelfUdpHandler, GelfTlsHandler
 from common import logger, send, log_and_decode
 import pytest
 import mock
