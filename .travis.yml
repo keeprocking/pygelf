@@ -11,6 +11,3 @@ install:
   - pip install -e .
   - pip install requests
 script: py.test -v
-branches:
-  only:
-    - master
