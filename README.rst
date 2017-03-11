@@ -9,7 +9,7 @@ pygelf
 
 Python logging handlers with GELF (Graylog Extended Log Format) support.
 
-Currently TCP, UDP and TLS (encrypted TCP) logging handlers are supported.
+Currently TCP, UDP, TLS (encrypted TCP) and HTTP logging handlers are supported.
 
 Get pygelf
 ==========
