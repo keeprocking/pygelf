@@ -22,15 +22,16 @@ Usage
 
 .. code:: python
 
-    from pygelf import GelfTcpHandler, GelfUdpHandler, GelfTlsHandler
+    from pygelf import GelfTcpHandler, GelfUdpHandler, GelfTlsHandler, GelfHttpHandler
     import logging
 
 
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger()
     logger.addHandler(GelfTcpHandler(host='127.0.0.1', port=9401, debug=True))
-    logger.addHandler(GelfUdpHandler(host='127.0.0.1', port=9402, compress=True, chunk_size=1350))
+    logger.addHandler(GelfUdpHandler(host='127.0.0.1', port=9402, chunk_size=1350))
     logger.addHandler(GelfTlsHandler(host='127.0.0.1', port=9403, validate=True, ca_certs='/etc/ssl/certs/ca-certificates.crt'))
+    logger.addHandler(GelfHttpHandler(host='127.0.0.1', port=9404, compress=False))
 
     logging.info('hello gelf')
 
@@ -74,12 +75,12 @@ Each handler has the following parameters:
 - **version** ('1.1' by default): GELF protocol version, can be overridden
 - **include_extra_fields** (False by default): if true, each log message will include all the extra fields set to LogRecord
 
-In addition UDP and TLS handlers have some specific parameters.
+Also, there are some handler-specific parameters.
 
 UDP:
 
 - **chunk\_size** (1300 by default) - maximum length of the message. If log length exceeds this value, it splits into multiple chunks (see https://www.graylog.org/resources/gelf/ section "chunked GELF") with the length equals to this value. This parameter must be less than the MTU_. If the logs don't seem to be delivered, try to reduce this value.
-- **compress** (True by default): if true, compress log messages before send them to the server
+- **compress** (True by default) - if true, compress log messages before sending them to the server
 
 .. _MTU: https://en.wikipedia.org/wiki/Maximum_transmission_unit
 
@@ -89,6 +90,11 @@ TLS:
 - **ca_certs** (None by default) - path to CA bundle file. This parameter is required if **validate** is true.
 - **certfile** (None by default) - path to certificate file that will be used to identify ourselves to the remote endpoint. This is necessary when the remote server has client authentication required. If **certfile** contains the private key, it should be placed before the certificate.
 - **keyfile** (None by default) - path to the private key. If the private key is stored in **certfile** this parameter can be None.
+
+HTTP:
+
+- **compress** (True by default) - if true, compress log messages before sending them to the server
+- **timeout** (5 by default) - amount of seconds that HTTP client should wait before it discards the request if the server doesn't respond
 
 Static fields
 =============

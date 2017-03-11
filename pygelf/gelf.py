@@ -62,7 +62,7 @@ def add_extra_fields(gelf, record):
             gelf['_%s' % key] = value
 
 
-def pack(gelf, compress=False):
+def pack(gelf, compress):
     packed = json.dumps(gelf).encode('utf-8')
     return zlib.compress(packed) if compress else packed
 

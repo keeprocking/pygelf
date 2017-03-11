@@ -1,1 +1,1 @@
-from .handlers import GelfTcpHandler, GelfUdpHandler, GelfTlsHandler
+from .handlers import GelfTcpHandler, GelfUdpHandler, GelfTlsHandler, GelfHttpHandler

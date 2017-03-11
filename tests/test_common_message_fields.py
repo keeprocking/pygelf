@@ -1,4 +1,4 @@
-from pygelf import GelfTcpHandler, GelfUdpHandler, GelfTlsHandler
+from pygelf import GelfTcpHandler, GelfUdpHandler, GelfTlsHandler, GelfHttpHandler
 from common import logger, send, log_and_decode
 import pytest
 import mock
@@ -66,12 +66,14 @@ def test_debug_fields(logger, handler, send):
     message = log_and_decode(logger, send, 'hello gelf')
 
     debug_fields = {
-        '_line': 22,
         '_file': 'common.py',
         '_module': 'common',
         '_func': 'log_and_decode',
         '_logger_name': logger.name
     }
+
+    if handler.debug:
+        assert '_line' in message
 
     for k, v in debug_fields.items():
         if handler.debug:

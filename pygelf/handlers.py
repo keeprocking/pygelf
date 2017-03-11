@@ -1,11 +1,17 @@
-from logging.handlers import SocketHandler, DatagramHandler
+from logging.handlers import SocketHandler, DatagramHandler, HTTPHandler
+from logging import Handler as LoggingHandler
 from pygelf import gelf
 import ssl
 import socket
 
+try:
+    import httplib
+except ImportError:
+    import http.client as httplib
+
 
 class BaseHandler(object):
-    def __init__(self, debug=False, version='1.1', include_extra_fields=False, **kwargs):
+    def __init__(self, debug=False, version='1.1', include_extra_fields=False, compress=False, **kwargs):
         """
         Logging handler that transforms each record into GELF (graylog extended log format) and sends it over TCP.
 
@@ -21,6 +27,13 @@ class BaseHandler(object):
         self.include_extra_fields = include_extra_fields
         self.additional_fields.pop('_id', None)
         self.domain = socket.getfqdn()
+        self.compress = compress
+
+    def convert_record_to_gelf(self, record):
+        return gelf.pack(
+            gelf.make(record, self.domain, self.debug, self.version, self.additional_fields, self.include_extra_fields),
+            self.compress
+        )
 
 
 class GelfTcpHandler(BaseHandler, SocketHandler):
@@ -37,11 +50,8 @@ class GelfTcpHandler(BaseHandler, SocketHandler):
         BaseHandler.__init__(self, **kwargs)
 
     def makePickle(self, record):
-        message = gelf.make(record, self.domain, self.debug, self.version, self.additional_fields, self.include_extra_fields)
-        packed = gelf.pack(message)
-
         """ if you send the message over tcp, it should always be null terminated or the input will reject it """
-        return packed + b'\x00'
+        return self.convert_record_to_gelf(record) + b'\x00'
 
 
 class GelfUdpHandler(BaseHandler, DatagramHandler):
@@ -54,14 +64,13 @@ class GelfUdpHandler(BaseHandler, DatagramHandler):
 
         :param host: GELF UDP input host
         :param port: GELF UDP input port
-        :param compress: compress message before send it to the server or not
+        :param compress: compress message before sending it to the server or not
         :param chunk_size: length of a chunk, should be less than the MTU (maximum transmission unit)
         """
 
         DatagramHandler.__init__(self, host, port)
-        BaseHandler.__init__(self, **kwargs)
+        BaseHandler.__init__(self, compress=compress, **kwargs)
 
-        self.compress = compress
         self.chunk_size = chunk_size
 
     def send(self, s):
@@ -73,9 +82,7 @@ class GelfUdpHandler(BaseHandler, DatagramHandler):
                 DatagramHandler.send(self, chunk)
 
     def makePickle(self, record):
-        message = gelf.make(record, self.domain, self.debug, self.version, self.additional_fields, self.include_extra_fields)
-        packed = gelf.pack(message, self.compress)
-        return packed
+        return self.convert_record_to_gelf(record)
 
 
 class GelfTlsHandler(GelfTcpHandler):
@@ -116,3 +123,33 @@ class GelfTlsHandler(GelfTcpHandler):
         wrapped_socket.connect((self.host, self.port))
 
         return wrapped_socket
+
+
+class GelfHttpHandler(BaseHandler, LoggingHandler):
+
+    def __init__(self, host, port, compress=True, timeout=5, **kwargs):
+        """
+        Logging handler that transforms each record into GELF (graylog extended log format) and sends it over HTTP.
+
+        :param host: GELF HTTP input host
+        :param port: GELF HTTP input port
+        :param compress: compress message before sending it to the server or not
+        :param timeout: amount of seconds that HTTP client should wait before it discards the request
+                        if the server doesn't respond
+        """
+
+        LoggingHandler.__init__(self)
+        BaseHandler.__init__(self, compress=compress, **kwargs)
+
+        self.host = host
+        self.port = port
+        self.timeout = timeout
+        self.headers = {}
+
+        if compress:
+            self.headers['Content-Encoding'] = 'gzip,deflate'
+
+    def emit(self, record):
+        data = self.convert_record_to_gelf(record)
+        connection = httplib.HTTPConnection(host=self.host, port=self.port, timeout=self.timeout)
+        connection.request("POST", '/gelf', data, self.headers)

@@ -1,4 +1,4 @@
-from pygelf import GelfTcpHandler, GelfUdpHandler
+from pygelf import GelfTcpHandler, GelfUdpHandler, GelfHttpHandler
 from common import logger
 import uuid
 import requests
@@ -21,7 +21,9 @@ API_URL = 'http://127.0.0.1:9000/api/search/universal/relative?query={0}&range=5
 @pytest.fixture(params=[
     GelfTcpHandler(host='127.0.0.1', port=12201, debug=True, **ADDITIONAL_FIELDS),
     GelfUdpHandler(host='127.0.0.1', port=12202, debug=True, **ADDITIONAL_FIELDS),
-    GelfUdpHandler(host='127.0.0.1', port=12202, debug=True, compress=True, **ADDITIONAL_FIELDS),
+    GelfUdpHandler(host='127.0.0.1', port=12202, debug=True, compress=False, **ADDITIONAL_FIELDS),
+    GelfHttpHandler(host='127.0.0.1', port=12203, debug=True, **ADDITIONAL_FIELDS),
+    GelfHttpHandler(host='127.0.0.1', port=12203, debug=True, compress=False, **ADDITIONAL_FIELDS),
 ])
 def handler(request):
     return request.param
