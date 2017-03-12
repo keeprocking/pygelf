@@ -12,10 +12,11 @@ SKIP_TEST = os.environ.get('TEST_INPUTS') is None
 
 ADDITIONAL_FIELDS = {
     '_ozzy': 'diary of a madman',
-    '_van_halen': 1984
+    '_van_halen': 1984,
+    '_long_cat': 'is l{0}ng'.format('o' * 2000)
 }
 API_URL = 'http://127.0.0.1:9000/api/search/universal/relative?query={0}&range=5&fields=' \
-    + '%2C'.join(('message', 'van_halen', 'ozzy', 'func', 'file', 'line', 'module', 'logger_name'))
+    + '%2C'.join(('message', 'van_halen', 'ozzy', 'long_cat', 'func', 'file', 'line', 'module', 'logger_name'))
 
 
 @pytest.fixture(params=[
@@ -48,6 +49,7 @@ def test_input(logger):
     assert message['message'] == unique_message
     assert message['ozzy'] == 'diary of a madman'
     assert message['van_halen'] == 1984
+    assert message['long_cat'] == 'is l{0}ng'.format('o' * 2000)
     assert message['func'] == 'test_input'
     assert message['file'] == 'test_inputs.py'
     assert message['module'] == 'test_inputs'

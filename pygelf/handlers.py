@@ -128,13 +128,14 @@ class GelfTlsHandler(GelfTcpHandler):
 
 class GelfHttpHandler(BaseHandler, LoggingHandler):
 
-    def __init__(self, host, port, compress=True, timeout=5, **kwargs):
+    def __init__(self, host, port, compress=True, path='/gelf', timeout=5, **kwargs):
         """
         Logging handler that transforms each record into GELF (graylog extended log format) and sends it over HTTP.
 
         :param host: GELF HTTP input host
         :param port: GELF HTTP input port
         :param compress: compress message before sending it to the server or not
+        :param path: path of the HTTP input (http://docs.graylog.org/en/latest/pages/sending_data.html#gelf-via-http)
         :param timeout: amount of seconds that HTTP client should wait before it discards the request
                         if the server doesn't respond
         """
@@ -144,6 +145,7 @@ class GelfHttpHandler(BaseHandler, LoggingHandler):
 
         self.host = host
         self.port = port
+        self.path = path
         self.timeout = timeout
         self.headers = {}
 
@@ -153,4 +155,4 @@ class GelfHttpHandler(BaseHandler, LoggingHandler):
     def emit(self, record):
         data = self.convert_record_to_gelf(record)
         connection = httplib.HTTPConnection(host=self.host, port=self.port, timeout=self.timeout)
-        connection.request("POST", '/gelf', data, self.headers)
+        connection.request('POST', self.path, data, self.headers)

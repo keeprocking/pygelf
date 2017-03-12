@@ -94,6 +94,7 @@ TLS:
 HTTP:
 
 - **compress** (True by default) - if true, compress log messages before sending them to the server
+- **path** ('/gelf' by default) - path of the HTTP input (http://docs.graylog.org/en/latest/pages/sending_data.html#gelf-via-http)
 - **timeout** (5 by default) - amount of seconds that HTTP client should wait before it discards the request if the server doesn't respond
 
 Static fields
