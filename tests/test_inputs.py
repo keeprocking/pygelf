@@ -7,9 +7,6 @@ import os
 import pytest
 
 
-SKIP_TEST = os.environ.get('TEST_INPUTS') is None
-
-
 ADDITIONAL_FIELDS = {
     '_ozzy': 'diary of a madman',
     '_van_halen': 1984,
@@ -30,7 +27,6 @@ def handler(request):
     return request.param
 
 
-@pytest.mark.skipif(SKIP_TEST, reason="Missing TEST_INPUTS env variable")
 def test_input(logger):
     unique_message = str(uuid.uuid4())
 
