@@ -52,7 +52,6 @@ def test_full_message(logger):
         assert 'Exception: ' in parsed_message['full_message']
 
 
-
 def test_source(logger):
     original_source = socket.getfqdn()
     with mock.patch('socket.getfqdn', return_value='different_domain'):
