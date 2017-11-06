@@ -6,6 +6,7 @@ import socket
 import logging
 
 
+SYSLOG_LEVEL_ERROR = 3
 SYSLOG_LEVEL_WARNING = 4
 
 
@@ -35,6 +36,21 @@ def test_formatted_message(logger):
     assert parsed_message['message'] == message + '_hello_gelf'
     assert parsed_message['level'] == SYSLOG_LEVEL_WARNING
     assert 'full_message' not in parsed_message
+
+
+def test_full_message(logger):
+    message = get_unique_message()
+
+    try:
+        raise Exception(message)
+    except Exception as e:
+        parsed_message = log_exception(logger, message, e)
+        assert parsed_message['message'] == message
+        assert parsed_message['level'] == SYSLOG_LEVEL_ERROR
+        assert message in parsed_message['full_message']
+        assert 'Traceback (most recent call last)' in parsed_message['full_message']
+        assert 'Exception: ' in parsed_message['full_message']
+
 
 
 def test_source(logger):
