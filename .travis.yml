@@ -10,4 +10,8 @@ python:
 install:
   - pip install -e .
   - pip install requests
+before_script:
+  - docker-compose -f tests/config/docker-compose.yml up -d
 script: py.test -v
+after_script:
+  - docker-compose down
