@@ -11,7 +11,7 @@ SYSLOG_LEVEL_WARNING = 4
 
 
 @pytest.fixture(params=[
-    GelfTcpHandler(host='127.0.0.1', port=12201),
+    # GelfTcpHandler(host='127.0.0.1', port=12201),
     GelfUdpHandler(host='127.0.0.1', port=12202),
     GelfUdpHandler(host='127.0.0.1', port=12202, compress=False),
     GelfHttpHandler(host='127.0.0.1', port=12203),

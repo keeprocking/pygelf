@@ -13,7 +13,6 @@ install:
 before_script:
   - docker-compose -f tests/config/docker-compose.yml up -d
   - sleep 30
-  - curl -XPOST http://localhost:12203/gelf -d '{"version":"1.1", "short_message":"hack hack hack", "host":"example.org"}'
 script: py.test -s -v
 after_script:
   - docker-compose down
