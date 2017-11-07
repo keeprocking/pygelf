@@ -31,14 +31,14 @@ def get_unique_message():
     return str(uuid.uuid4())
 
 
-BASE_API_URL = 'http://127.0.0.1:9000/api/search/universal/relative?query={0}&range=15&fields='
+BASE_API_URL = 'http://127.0.0.1:9000/api/search/universal/relative?query={0}&range=5&fields='
 DEFAULT_FIELDS = ['message', 'full_message', 'source', 'level', 'func', 'file', 'line', 'module', 'logger_name']
 def _build_api_string(message, fields):
 	return BASE_API_URL.format(message) + '%2C'.join(set(DEFAULT_FIELDS + fields))
 
 
 def _get_api_response(message, fields):
-    time.sleep(10)
+    time.sleep(2)
     url = _build_api_string(message, fields)
     api_response = requests.get(url, auth=('admin', 'admin'), headers={'accept': 'application/json'})
     return api_response
