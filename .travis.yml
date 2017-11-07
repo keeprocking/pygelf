@@ -12,7 +12,7 @@ install:
   - pip install requests
 before_script:
   - docker-compose -f tests/config/docker-compose.yml up -d
-  - sleep 30
+  - sleep 40
   - "curl -v -u admin:admin 'http://127.0.0.1:9000/api/search/universal/relative?query=test&range=5&fields=message' || true"
 script: py.test -s -v
 after_script:
