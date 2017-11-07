@@ -13,7 +13,7 @@ install:
 before_script:
   - docker-compose -f tests/config/docker-compose.yml up -d
   - sleep 30
-  - ./tests/config/touch_api
+  - ./tests/config/touch_api || true
 script: py.test -s -v
 after_script:
   - docker-compose down
