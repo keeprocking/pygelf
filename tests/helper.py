@@ -40,6 +40,7 @@ def _build_api_string(message, fields):
 def _get_api_response(message, fields):
     time.sleep(2)
     url = _build_api_string(message, fields)
+    print(url)
     api_response = requests.get(url, auth=('admin', 'admin'), headers={'accept': 'application/json'})
     return api_response
 
