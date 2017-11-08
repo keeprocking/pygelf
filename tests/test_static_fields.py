@@ -17,7 +17,7 @@ def handler(request):
     return request.param
 
 
-def test_static_gields(logger):
+def test_static_fields(logger):
     message = get_unique_message()
     parsed_message = log_warning(logger, message, fields=['ozzy', 'van_halen'])
     assert parsed_message['message'] == message
