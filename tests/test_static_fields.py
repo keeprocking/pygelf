@@ -6,12 +6,19 @@ import socket
 import logging
 
 
+STATIC_FIELDS = {
+    '_ozzy': 'diary of a madman',
+    '_van_halen': 1984,
+    '_id': 42
+}
+
+
 @pytest.fixture(params=[
-    GelfTcpHandler(host='127.0.0.1', port=12201, _ozzy='diary of a madman', _van_halen=1984, _id=42),
-    GelfUdpHandler(host='127.0.0.1', port=12202, _ozzy='diary of a madman', _van_halen=1984, _id=42),
-    GelfUdpHandler(host='127.0.0.1', port=12202, compress=False, _ozzy='diary of a madman', _van_halen=1984, _id=42),
-    GelfHttpHandler(host='127.0.0.1', port=12203, _ozzy='diary of a madman', _van_halen=1984, _id=42),
-    GelfHttpHandler(host='127.0.0.1', port=12203, compress=False, _ozzy='diary of a madman', _van_halen=1984, _id=42),
+    GelfTcpHandler(host='127.0.0.1', port=12201, **STATIC_FIELDS),
+    GelfUdpHandler(host='127.0.0.1', port=12202, **STATIC_FIELDS),
+    GelfUdpHandler(host='127.0.0.1', port=12202, **STATIC_FIELDS),
+    GelfHttpHandler(host='127.0.0.1', port=12203, **STATIC_FIELDS),
+    GelfHttpHandler(host='127.0.0.1', port=12203, compress=False, **STATIC_FIELDS),
 ])
 def handler(request):
     return request.param
