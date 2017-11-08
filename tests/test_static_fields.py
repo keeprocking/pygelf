@@ -16,7 +16,7 @@ STATIC_FIELDS = {
 @pytest.fixture(params=[
     GelfTcpHandler(host='127.0.0.1', port=12201, **STATIC_FIELDS),
     GelfUdpHandler(host='127.0.0.1', port=12202, **STATIC_FIELDS),
-    GelfUdpHandler(host='127.0.0.1', port=12202, **STATIC_FIELDS),
+    GelfUdpHandler(host='127.0.0.1', port=12202, compress=False, **STATIC_FIELDS),
     GelfHttpHandler(host='127.0.0.1', port=12203, **STATIC_FIELDS),
     GelfHttpHandler(host='127.0.0.1', port=12203, compress=False, **STATIC_FIELDS),
 ])
