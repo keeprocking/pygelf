@@ -27,6 +27,11 @@ def test_simple_message(logger):
     assert parsed_message['message'] == message
     assert parsed_message['level'] == SYSLOG_LEVEL_WARNING
     assert 'full_message' not in parsed_message
+    assert 'file' not in parsed_message
+    assert 'module' not in parsed_message
+    assert 'func' not in parsed_message
+    assert 'logger_name' not in parsed_message
+    assert 'line' not in parsed_message
 
 
 def test_formatted_message(logger):
@@ -50,6 +55,11 @@ def test_full_message(logger):
         assert message in parsed_message['full_message']
         assert 'Traceback (most recent call last)' in parsed_message['full_message']
         assert 'Exception: ' in parsed_message['full_message']
+        assert 'file' not in parsed_message
+        assert 'module' not in parsed_message
+        assert 'func' not in parsed_message
+        assert 'logger_name' not in parsed_message
+        assert 'line' not in parsed_message
 
 
 def test_source(logger):
