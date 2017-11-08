@@ -10,6 +10,7 @@ class DummyFilter(logging.Filter):
     def filter(self, record):
         record.ozzy = 'diary of a madman'
         record.van_halen = 1984
+        record.id = 42
         return True
 
 
@@ -41,3 +42,5 @@ def test_dynamic_fields(logger):
     assert parsed_message['message'] == message
     assert parsed_message['ozzy'] == 'diary of a madman'
     assert parsed_message['van_halen'] == 1984
+    assert parsed_message['_id'] != 42
+    assert 'id' not in parsed_message
