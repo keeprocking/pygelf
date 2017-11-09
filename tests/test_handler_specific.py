@@ -2,7 +2,7 @@ from pygelf import GelfTlsHandler
 import pytest
 
 
-def test_tls_handler_creation():
+def test_tls_handler_init():
     with pytest.raises(ValueError):
         GelfTlsHandler(host='127.0.0.1', port=12204, validate=True)
 
