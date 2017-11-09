@@ -15,13 +15,16 @@ def logger(handler):
     logger.removeHandler(handler)
 
 
-def log_warning(logger, message, args=[], fields=[]):
+def log_warning(logger, message, args=None, fields=None):
+    args = args if args else []
+    fields = fields if fields else []
     logger.warning(message, *args)
     api_response = _get_api_response(message % args, fields)
     return _parse_api_response(api_response)
 
 
-def log_exception(logger, message, exception, fields=[]):
+def log_exception(logger, message, exception, fields=None):
+    fields = fields if fields else []
     logger.exception(exception)
     api_response = _get_api_response(message, fields)
     return _parse_api_response(api_response)
@@ -31,8 +34,11 @@ def get_unique_message():
     return str(uuid.uuid4())
 
 
+DEFAULT_FIELDS = [
+    'message', 'full_message', 'source', 'level',
+    'func', 'file', 'line', 'module', 'logger_name',
+]
 BASE_API_URL = 'http://127.0.0.1:9000/api/search/universal/relative?query={0}&range=5&fields='
-DEFAULT_FIELDS = ['message', 'full_message', 'source', 'level', 'func', 'file', 'line', 'module', 'logger_name']
 def _build_api_string(message, fields):
 	return BASE_API_URL.format(message) + '%2C'.join(set(DEFAULT_FIELDS + fields))
 
