@@ -126,8 +126,8 @@ Example:
             record.job_id = threading.local().process_id
             return True
 
-    logger.addFilter(ContextFilter())
     handler = GelfUdpHandler(host='127.0.0.1', port=9402, include_extra_fields=True)
+    handler.addFilter(ContextFilter())
     logger.addHandler(handler)
 
 Running tests
