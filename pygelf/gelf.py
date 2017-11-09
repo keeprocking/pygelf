@@ -34,7 +34,7 @@ def make(record, domain, debug, version, additional_fields, include_extra_fields
         'short_message': record.getMessage(),
         'timestamp': record.created,
         'level': _levels[record.levelno],
-        'source': domain
+        'host': domain
     }
 
     if record.exc_info is not None:
