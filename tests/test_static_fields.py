@@ -19,6 +19,11 @@ STATIC_FIELDS = {
     GelfUdpHandler(host='127.0.0.1', port=12202, compress=False, **STATIC_FIELDS),
     GelfHttpHandler(host='127.0.0.1', port=12203, **STATIC_FIELDS),
     GelfHttpHandler(host='127.0.0.1', port=12203, compress=False, **STATIC_FIELDS),
+    GelfTcpHandler(host='127.0.0.1', port=12201, static_fields=STATIC_FIELDS, _ozzy='billie jean'),
+    GelfUdpHandler(host='127.0.0.1', port=12202, static_fields=STATIC_FIELDS, _ozzy='billie jean'),
+    GelfUdpHandler(host='127.0.0.1', port=12202, compress=False, static_fields=STATIC_FIELDS, _ozzy='billie jean'),
+    GelfHttpHandler(host='127.0.0.1', port=12203, static_fields=STATIC_FIELDS, _ozzy='billie jean'),
+    GelfHttpHandler(host='127.0.0.1', port=12203, compress=False, static_fields=STATIC_FIELDS, _ozzy='billie jean'),
 ])
 def handler(request):
     return request.param

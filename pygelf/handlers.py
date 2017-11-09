@@ -11,7 +11,7 @@ except ImportError:
 
 
 class BaseHandler(object):
-    def __init__(self, debug=False, version='1.1', include_extra_fields=False, compress=False, **kwargs):
+    def __init__(self, debug=False, version='1.1', include_extra_fields=False, compress=False, static_fields=None, **kwargs):
         """
         Logging handler that transforms each record into GELF (graylog extended log format) and sends it over TCP.
 
@@ -23,7 +23,7 @@ class BaseHandler(object):
 
         self.debug = debug
         self.version = version
-        self.additional_fields = kwargs
+        self.additional_fields = static_fields if static_fields else kwargs
         self.include_extra_fields = include_extra_fields
         self.additional_fields.pop('_id', None)
         self.domain = socket.getfqdn()
