@@ -26,9 +26,9 @@ def handler(request):
 
 def test_static_fields(logger):
     message = get_unique_message()
-    parsed_message = log_warning(logger, message, fields=['ozzy', 'van_halen'])
-    assert parsed_message['message'] == message
-    assert parsed_message['ozzy'] == 'diary of a madman'
-    assert parsed_message['van_halen'] == 1984
-    assert parsed_message['_id'] != 42
-    assert 'id' not in parsed_message
+    graylog_response = log_warning(logger, message, fields=['ozzy', 'van_halen'])
+    assert graylog_response['message'] == message
+    assert graylog_response['ozzy'] == 'diary of a madman'
+    assert graylog_response['van_halen'] == 1984
+    assert graylog_response['_id'] != 42
+    assert 'id' not in graylog_response

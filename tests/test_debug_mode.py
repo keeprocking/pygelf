@@ -19,10 +19,10 @@ def handler(request):
 
 def test_debug_mode(logger):
     message = get_unique_message()
-    parsed_message = log_warning(logger, message)
-    assert parsed_message['message'] == message
-    assert parsed_message['file'] == 'helper.py'
-    assert parsed_message['module'] == 'helper'
-    assert parsed_message['func'] == 'log_warning'
-    assert parsed_message['logger_name'] == 'test'
-    assert 'line' in parsed_message
+    graylog_response = log_warning(logger, message)
+    assert graylog_response['message'] == message
+    assert graylog_response['file'] == 'helper.py'
+    assert graylog_response['module'] == 'helper'
+    assert graylog_response['func'] == 'log_warning'
+    assert graylog_response['logger_name'] == 'test'
+    assert 'line' in graylog_response
