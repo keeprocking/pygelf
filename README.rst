@@ -28,12 +28,12 @@ Usage
 
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger()
-    logger.addHandler(GelfTcpHandler(host='127.0.0.1', port=9401, debug=True))
-    logger.addHandler(GelfUdpHandler(host='127.0.0.1', port=9402, chunk_size=1350))
-    logger.addHandler(GelfTlsHandler(host='127.0.0.1', port=9403, validate=True, ca_certs='/etc/ssl/certs/ca-certificates.crt'))
-    logger.addHandler(GelfHttpHandler(host='127.0.0.1', port=9404, compress=False))
+    logger.addHandler(GelfTcpHandler(host='127.0.0.1', port=9401))
+    logger.addHandler(GelfUdpHandler(host='127.0.0.1', port=9402))
+    logger.addHandler(GelfTlsHandler(host='127.0.0.1', port=9403))
+    logger.addHandler(GelfHttpHandler(host='127.0.0.1', port=9404))
 
-    logging.info('hello gelf')
+    logger.info('hello gelf')
 
 Message structure
 =================
@@ -52,7 +52,7 @@ According to the GELF spec, each message has the following mandatory fields:
     try:
         1/0
     except ZeroDivisionError as e:
-        logging.exception(e)
+        logger.exception(e)
 
 .. _FQDN: https://en.wikipedia.org/wiki/Fully_qualified_domain_name
 .. _syslog-compliant: https://en.wikipedia.org/wiki/Syslog#Severity_level
