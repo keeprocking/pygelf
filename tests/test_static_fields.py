@@ -1,4 +1,4 @@
-from pygelf import GelfTcpHandler, GelfUdpHandler, GelfHttpHandler
+from pygelf import GelfTcpHandler, GelfUdpHandler, GelfHttpHandler, GelfTlsHandler
 from tests.helper import logger, get_unique_message, log_warning, log_exception
 import pytest
 import mock
@@ -19,11 +19,15 @@ STATIC_FIELDS = {
     GelfUdpHandler(host='127.0.0.1', port=12202, compress=False, **STATIC_FIELDS),
     GelfHttpHandler(host='127.0.0.1', port=12203, **STATIC_FIELDS),
     GelfHttpHandler(host='127.0.0.1', port=12203, compress=False, **STATIC_FIELDS),
+    GelfTlsHandler(host='127.0.0.1', port=12204, **STATIC_FIELDS),
+    GelfTlsHandler(host='127.0.0.1', port=12204, validate=True, ca_certs='tests/config/cert.pem', **STATIC_FIELDS),
     GelfTcpHandler(host='127.0.0.1', port=12201, static_fields=STATIC_FIELDS, _ozzy='billie jean'),
     GelfUdpHandler(host='127.0.0.1', port=12202, static_fields=STATIC_FIELDS, _ozzy='billie jean'),
     GelfUdpHandler(host='127.0.0.1', port=12202, compress=False, static_fields=STATIC_FIELDS, _ozzy='billie jean'),
     GelfHttpHandler(host='127.0.0.1', port=12203, static_fields=STATIC_FIELDS, _ozzy='billie jean'),
     GelfHttpHandler(host='127.0.0.1', port=12203, compress=False, static_fields=STATIC_FIELDS, _ozzy='billie jean'),
+    GelfTlsHandler(host='127.0.0.1', port=12204, static_fields=STATIC_FIELDS),
+    GelfTlsHandler(host='127.0.0.1', port=12204, validate=True, ca_certs='tests/config/cert.pem', static_fields=STATIC_FIELDS, _ozzy='billie jean'),
 ])
 def handler(request):
     return request.param
