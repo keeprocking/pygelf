@@ -40,7 +40,8 @@ def make(record, domain, debug, version, additional_fields, include_extra_fields
     if record.exc_info is not None:
         gelf['full_message'] = '\n'.join(traceback.format_exception(*record.exc_info))
     elif record.exc_text is not None:
-        # If a QueueHandler has already formatted the exc_info for us
+        # QueueHandler, if used, formats the record, so that exc_info will always be empty:
+        # https://docs.python.org/3/library/logging.handlers.html#logging.handlers.QueueHandler
         gelf['full_message'] = record.exc_text
 
     if debug:
