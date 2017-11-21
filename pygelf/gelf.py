@@ -39,6 +39,9 @@ def make(record, domain, debug, version, additional_fields, include_extra_fields
 
     if record.exc_info is not None:
         gelf['full_message'] = '\n'.join(traceback.format_exception(*record.exc_info))
+    elif record.exc_text is not None:
+        # If a QueueHandler has already formatted the exc_info for us
+        gelf['full_message'] = record.exc_text
 
     if debug:
         gelf['_file'] = record.filename
