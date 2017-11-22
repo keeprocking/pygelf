@@ -9,7 +9,7 @@ python:
   - "pypy"
 install:
   - pip install -e .
-  - pip install requests pytest-cov codecov
+  - pip install requests pytest-cov coveralls
 before_script:
   - docker-compose -f tests/config/docker-compose.yml up -d
   - sleep 40
@@ -18,4 +18,4 @@ script: py.test -v --cov=pygelf
 after_script:
   - docker-compose -f tests/config/docker-compose.yml down
 after_success:
-  - codecov
+  - coveralls
