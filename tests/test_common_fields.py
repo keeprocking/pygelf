@@ -48,14 +48,14 @@ def test_full_message(logger):
     message = get_unique_message()
 
     try:
-        1/0
-    except ZeroDivisionError as e:
+        raise ValueError(message)
+    except ValueError as e:
         graylog_response = log_exception(logger, message, e)
         assert graylog_response['message'] == message
         assert graylog_response['level'] == SYSLOG_LEVEL_ERROR
         assert message in graylog_response['full_message']
         assert 'Traceback (most recent call last)' in graylog_response['full_message']
-        assert 'Exception: ' in graylog_response['full_message']
+        assert 'ValueError: ' in graylog_response['full_message']
         assert 'file' not in graylog_response
         assert 'module' not in graylog_response
         assert 'func' not in graylog_response

@@ -29,9 +29,9 @@ def test_full_message(logger):
 
     with mock.patch.object(logging.Handler, 'handle', new=fake_handle):
         try:
-            1/0
-        except ZeroDivisionError as e:
+            raise ValueError(message)
+        except ValueError as e:
             graylog_response = log_exception(logger, message, e)
             assert message in graylog_response['full_message']
             assert 'Traceback (most recent call last)' in graylog_response['full_message']
-            assert 'Exception: ' in graylog_response['full_message']
+            assert 'ValueError: ' in graylog_response['full_message']
