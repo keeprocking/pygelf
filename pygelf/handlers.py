@@ -11,7 +11,6 @@ from logging import Handler as LoggingHandler
 from pygelf import gelf
 
 
-
 class BaseHandler(object):
     def __init__(self, debug=False, version='1.1', include_extra_fields=False, compress=False,
                  static_fields=None, **kwargs):
