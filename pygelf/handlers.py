@@ -13,7 +13,8 @@ from pygelf import gelf
 
 
 class BaseHandler(object):
-    def __init__(self, debug=False, version='1.1', include_extra_fields=False, compress=False, static_fields=None, **kwargs):
+    def __init__(self, debug=False, version='1.1', include_extra_fields=False, compress=False,
+                 static_fields=None, **kwargs):
         """
         Logging handler that transforms each record into GELF (graylog extended log format) and sends it over TCP.
 
