@@ -1,0 +1,13 @@
+[DESIGN]
+max-args=7
+min-public-methods=1
+
+[FORMAT]
+max-line-length=120
+single-line-if-stmt=no
+indent-string='    '
+indent-after-paren=4
+expected-line-ending-format=LF
+
+[MESSAGES CONTROL]
+disable=C0111
