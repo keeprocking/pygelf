@@ -1,10 +1,8 @@
-import pytest
-import mock
-import json
-import requests
 import uuid
 import time
 import logging
+import pytest
+import requests
 
 
 @pytest.yield_fixture
@@ -40,7 +38,7 @@ DEFAULT_FIELDS = [
 ]
 BASE_API_URL = 'http://127.0.0.1:9000/api/search/universal/relative?query={0}&range=5&fields='
 def _build_api_string(message, fields):
-	return BASE_API_URL.format(message) + '%2C'.join(set(DEFAULT_FIELDS + fields))
+    return BASE_API_URL.format(message) + '%2C'.join(set(DEFAULT_FIELDS + fields))
 
 
 def _get_api_response(message, fields):

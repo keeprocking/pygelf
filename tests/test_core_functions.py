@@ -1,8 +1,8 @@
-from pygelf import gelf
 import json
 import zlib
 import struct
 import pytest
+from pygelf import gelf
 
 
 @pytest.mark.parametrize('compress', [True, False])

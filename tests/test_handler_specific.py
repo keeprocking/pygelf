@@ -1,5 +1,5 @@
-from pygelf import GelfTlsHandler
 import pytest
+from pygelf import GelfTlsHandler
 
 
 def test_tls_handler_init():

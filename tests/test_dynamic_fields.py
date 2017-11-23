@@ -1,9 +1,7 @@
-from pygelf import GelfTcpHandler, GelfUdpHandler, GelfHttpHandler, GelfTlsHandler
-from tests.helper import logger, get_unique_message, log_warning, log_exception
-import pytest
-import mock
-import socket
 import logging
+import pytest
+from pygelf import GelfTcpHandler, GelfUdpHandler, GelfHttpHandler, GelfTlsHandler
+from tests.helper import get_unique_message, log_warning
 
 
 class DummyFilter(logging.Filter):
@@ -30,12 +28,12 @@ def handler(request):
 @pytest.yield_fixture
 def logger(handler):
     logger = logging.getLogger('test')
-    filter = DummyFilter()
-    logger.addFilter(filter)
+    dummy_filter = DummyFilter()
+    logger.addFilter(dummy_filter)
     logger.addHandler(handler)
     yield logger
     logger.removeHandler(handler)
-    logger.removeFilter(filter)
+    logger.removeFilter(dummy_filter)
 
 
 def test_dynamic_fields(logger):

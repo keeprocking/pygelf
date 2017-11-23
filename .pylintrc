@@ -2,6 +2,9 @@
 max-args=7
 min-public-methods=1
 
+[BASIC]
+good-names=e,_
+
 [FORMAT]
 max-line-length=120
 single-line-if-stmt=no
@@ -11,3 +14,6 @@ expected-line-ending-format=LF
 
 [MESSAGES CONTROL]
 disable=C0111
+
+[REPORTS]
+reports=no

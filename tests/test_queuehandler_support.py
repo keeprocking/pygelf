@@ -1,9 +1,8 @@
-from pygelf import GelfTcpHandler, GelfUdpHandler, GelfHttpHandler, GelfTlsHandler
-from tests.helper import logger, get_unique_message, log_warning, log_exception
+import logging
 import pytest
 import mock
-import socket
-import logging
+from pygelf import GelfTcpHandler, GelfUdpHandler, GelfHttpHandler, GelfTlsHandler
+from tests.helper import logger, get_unique_message, log_exception
 
 
 @pytest.fixture(params=[
@@ -30,8 +29,8 @@ def test_full_message(logger):
 
     with mock.patch.object(logging.Handler, 'handle', new=fake_handle):
         try:
-            raise Exception(message)
-        except Exception as e:
+            1/0
+        except ZeroDivisionError as e:
             graylog_response = log_exception(logger, message, e)
             assert message in graylog_response['full_message']
             assert 'Traceback (most recent call last)' in graylog_response['full_message']

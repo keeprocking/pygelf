@@ -1,9 +1,8 @@
-from pygelf import GelfTcpHandler, GelfUdpHandler, GelfHttpHandler, GelfTlsHandler
-from tests.helper import logger, get_unique_message, log_warning, log_exception
+import socket
 import pytest
 import mock
-import socket
-import logging
+from pygelf import GelfTcpHandler, GelfUdpHandler, GelfHttpHandler, GelfTlsHandler
+from tests.helper import logger, get_unique_message, log_warning, log_exception
 
 
 SYSLOG_LEVEL_ERROR = 3
@@ -49,8 +48,8 @@ def test_full_message(logger):
     message = get_unique_message()
 
     try:
-        raise Exception(message)
-    except Exception as e:
+        1/0
+    except ZeroDivisionError as e:
         graylog_response = log_exception(logger, message, e)
         assert graylog_response['message'] == message
         assert graylog_response['level'] == SYSLOG_LEVEL_ERROR

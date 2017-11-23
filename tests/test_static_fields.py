@@ -1,9 +1,6 @@
-from pygelf import GelfTcpHandler, GelfUdpHandler, GelfHttpHandler, GelfTlsHandler
-from tests.helper import logger, get_unique_message, log_warning, log_exception
 import pytest
-import mock
-import socket
-import logging
+from pygelf import GelfTcpHandler, GelfUdpHandler, GelfHttpHandler, GelfTlsHandler
+from tests.helper import logger, get_unique_message, log_warning
 
 
 STATIC_FIELDS = {
