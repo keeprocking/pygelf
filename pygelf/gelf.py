@@ -6,7 +6,7 @@ import struct
 import traceback
 
 
-_levels = {
+LEVELS = {
     logging.DEBUG: 7,
     logging.INFO: 6,
     logging.WARNING: 4,
@@ -20,7 +20,7 @@ _levels = {
 # http://docs.python.org/library/logging.html#logrecord-attributes
 # plus exc_text, which is only found in the logging module source,
 # and id, which is prohibited by the GELF format.
-_skip_list = (
+SKIP_LIST = (
     'args', 'asctime', 'created', 'exc_info', 'exc_text', 'filename',
     'funcName', 'id', 'levelname', 'levelno', 'lineno', 'module',
     'msecs', 'message', 'msg', 'name', 'pathname', 'process',
@@ -33,7 +33,7 @@ def make(record, domain, debug, version, additional_fields, include_extra_fields
         'version': version,
         'short_message': record.getMessage(),
         'timestamp': record.created,
-        'level': _levels[record.levelno],
+        'level': LEVELS[record.levelno],
         'host': domain
     }
 
@@ -62,7 +62,7 @@ def make(record, domain, debug, version, additional_fields, include_extra_fields
 
 def add_extra_fields(gelf, record):
     for key, value in record.__dict__.items():
-        if key not in _skip_list and not key.startswith('_'):
+        if key not in SKIP_LIST and not key.startswith('_'):
             gelf['_%s' % key] = value
 
 

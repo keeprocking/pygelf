@@ -1,6 +1,3 @@
-from logging.handlers import SocketHandler, DatagramHandler, HTTPHandler
-from logging import Handler as LoggingHandler
-from pygelf import gelf
 import ssl
 import socket
 
@@ -8,6 +5,11 @@ try:
     import httplib
 except ImportError:
     import http.client as httplib
+
+from logging.handlers import SocketHandler, DatagramHandler
+from logging import Handler as LoggingHandler
+from pygelf import gelf
+
 
 
 class BaseHandler(object):
@@ -92,10 +94,11 @@ class GelfTlsHandler(GelfTcpHandler):
         """
         TCP GELF logging handler with TLS support
 
-        :param validate: if true, validate server certificate. In that case ca_certs are required.
+        :param validate: if true, validate server certificate. In that case ca_certs are required
         :param ca_certs: path to CA bundle file. For instance, on CentOS it would be '/etc/pki/tls/certs/ca-bundle.crt'
-        :param certfile: path to the certificate file that is used to identify ourselves to the server.
-        :param keyfile: path to the private key. If the private key is stored with the certificate this parameter can be ignored.
+        :param certfile: path to the certificate file that is used to identify ourselves to the server
+        :param keyfile: path to the private key. If the private key is stored with the certificate,
+                        this parameter can be ignored
         """
 
         if validate and ca_certs is None:
@@ -108,19 +111,17 @@ class GelfTlsHandler(GelfTcpHandler):
 
         self.ca_certs = ca_certs
         self.reqs = ssl.CERT_REQUIRED if validate else ssl.CERT_NONE
-
         self.certfile = certfile
-        # Assume that if no keyfile was supplied, the private key it's in the certfile
-        self.keyfile = keyfile or certfile
+        self.keyfile = keyfile if keyfile else certfile
 
     def makeSocket(self, timeout=1):
-        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        plain_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-        if hasattr(s, 'settimeout'):
-            s.settimeout(timeout)
+        if hasattr(plain_socket, 'settimeout'):
+            plain_socket.settimeout(timeout)
 
-        wrapped_socket = ssl.wrap_socket(s, keyfile=self.keyfile, certfile=self.certfile,
-                                         ca_certs=self.ca_certs, cert_reqs=self.reqs)
+        wrapped_socket = ssl.wrap_socket(plain_socket, ca_certs=self.ca_certs, cert_reqs=self.reqs,
+                                         keyfile=self.keyfile, certfile=self.certfile)
         wrapped_socket.connect((self.host, self.port))
 
         return wrapped_socket
