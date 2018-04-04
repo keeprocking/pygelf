@@ -47,7 +47,7 @@ According to the GELF spec, each message has the following mandatory fields:
 - **short_message**: the log message itself
 - **timestamp**: current timestamp
 - **level**: syslog-compliant_ log level number (e.g. WARNING will be sent as 4)
-- **source**: FQDN_ of the machine that sent the message
+- **host**: FQDN_ of the machine that sent the message
 - **full_message**: this field contains stack trace and is being written **ONLY** when logging an exception, e.g.
 
 .. code:: python
