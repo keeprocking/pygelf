@@ -78,6 +78,7 @@ Each handler has the following parameters:
 - **debug** (False by default): if true, each log message will include debugging info: module name, file name, line number, method name
 - **version** ('1.1' by default): GELF protocol version, can be overridden
 - **include_extra_fields** (False by default): if true, each log message will include all the extra fields set to LogRecord
+- **json_default** (:code:`str` with exception for several :code:`datetime` objects): function that is called for objects that cannot be serialized to JSON natively by python. Default implementation is custom function that returns result of :code:`isoformat()` method for :code:`datetime.datetime`, :code:`datetime.time`, :code:`datetime.date` objects and result of :code:`str(obj)` call for other objects (which is string representation of an object with fallback to :code:`repr`)
 
 Also, there are some handler-specific parameters.
 
