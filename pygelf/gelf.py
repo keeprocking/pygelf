@@ -1,3 +1,4 @@
+import datetime
 import logging
 import json
 import zlib
@@ -66,8 +67,15 @@ def add_extra_fields(gelf, record):
             gelf['_%s' % key] = value
 
 
-def pack(gelf, compress):
-    packed = json.dumps(gelf).encode('utf-8')
+def object_to_json(obj):
+    """Convert object that cannot be natively serialized by python to JSON representation."""
+    if isinstance(obj, (datetime.datetime, datetime.date, datetime.time)):
+        return obj.isoformat()
+    return str(obj)
+
+
+def pack(gelf, compress, default):
+    packed = json.dumps(gelf, separators=(',', ':'), default=default).encode('utf-8')
     return zlib.compress(packed) if compress else packed
 
 
