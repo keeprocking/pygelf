@@ -25,7 +25,7 @@ Usage
 
 .. code:: python
 
-    from pygelf import GelfTcpHandler, GelfUdpHandler, GelfTlsHandler, GelfHttpHandler
+    from pygelf import GelfTcpHandler, GelfUdpHandler, GelfTlsHandler, GelfHttpHandler, GelfKafkaHandler
     import logging
 
 
@@ -35,6 +35,8 @@ Usage
     logger.addHandler(GelfUdpHandler(host='127.0.0.1', port=9402))
     logger.addHandler(GelfTlsHandler(host='127.0.0.1', port=9403))
     logger.addHandler(GelfHttpHandler(host='127.0.0.1', port=9404))
+    logger.addHandler(GelfKafkaHandler(bootstrap_servers=["127.0.0.1"],
+                                       topic="tpc_gelf"))
 
     logger.info('hello gelf')
 
@@ -101,6 +103,11 @@ HTTP:
 - **compress** (True by default) - if true, compress log messages before sending them to the server
 - **path** ('/gelf' by default) - path of the HTTP input (http://docs.graylog.org/en/latest/pages/sending_data.html#gelf-via-http)
 - **timeout** (5 by default) - amount of seconds that HTTP client should wait before it discards the request if the server doesn't respond
+
+Kafka:
+
+- **bootstrap_servers** - addresses of the kafka brokers
+- **topic** - name of the topic in the kafka cluster for GELF messages
 
 Static fields
 =============
