@@ -47,7 +47,7 @@ According to the GELF spec, each message has the following mandatory fields:
 - **short_message**: the log message itself
 - **timestamp**: current timestamp
 - **level**: syslog-compliant_ log level number (e.g. WARNING will be sent as 4)
-- **host**: FQDN_ of the machine that sent the message
+- **host**: hostname of the machine that sent the message
 - **full_message**: this field contains stack trace and is being written **ONLY** when logging an exception, e.g.
 
 .. code:: python
@@ -57,7 +57,6 @@ According to the GELF spec, each message has the following mandatory fields:
     except ZeroDivisionError as e:
         logger.exception(e)
 
-.. _FQDN: https://en.wikipedia.org/wiki/Fully_qualified_domain_name
 .. _syslog-compliant: https://en.wikipedia.org/wiki/Syslog#Severity_level
 
 In debug mode (when handler was created with debug=True option) each message contains some extra fields (which are pretty self-explanatory): 
