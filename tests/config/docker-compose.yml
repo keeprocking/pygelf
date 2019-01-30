@@ -6,7 +6,7 @@ services:
     image: "elasticsearch:2"
     command: "elasticsearch -Des.cluster.name='graylog'"
   graylog:
-    image: graylog2/server
+    image: "graylog/graylog:2.5"
     environment:
       GRAYLOG_PASSWORD_SECRET: CVanHILkuYhsxE50BrNR6FFt75rS3h0V2uUlHxAshGB90guZznEoDxN7zhPx6Bcn61mfhY2T5r0PRkZVwowsTkHU2rBZnv0d
       GRAYLOG_ROOT_PASSWORD_SHA2: 8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918

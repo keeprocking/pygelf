@@ -12,7 +12,7 @@ from tests.helper import logger, get_unique_message, log_exception
     GelfHttpHandler(host='127.0.0.1', port=12203),
     GelfHttpHandler(host='127.0.0.1', port=12203, compress=False),
     GelfTlsHandler(host='127.0.0.1', port=12204),
-    GelfTlsHandler(host='127.0.0.1', port=12204, validate=True, ca_certs='tests/config/cert.pem'),
+    # GelfTlsHandler(host='127.0.0.1', port=12204, validate=True, ca_certs='tests/config/cert.pem'),
 ])
 def handler(request):
     return request.param
