@@ -64,8 +64,8 @@ def test_full_message(logger):
 
 
 def test_source(logger):
-    original_source = socket.getfqdn()
-    with mock.patch('socket.getfqdn', return_value='different_domain'):
+    original_source = socket.gethostname()
+    with mock.patch('socket.gethostname', return_value='different_domain'):
         message = get_unique_message()
         graylog_response = log_warning(logger, message)
         assert graylog_response['source'] == original_source
