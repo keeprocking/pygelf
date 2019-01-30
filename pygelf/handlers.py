@@ -29,7 +29,7 @@ class BaseHandler(object):
         self.additional_fields = static_fields if static_fields else kwargs
         self.include_extra_fields = include_extra_fields
         self.additional_fields.pop('_id', None)
-        self.domain = socket.getfqdn()
+        self.domain = socket.gethostname()
         self.compress = compress
         self.json_default = json_default
 
