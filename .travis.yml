@@ -9,7 +9,7 @@ python:
   - "pypy"
 install:
   - pip install -e .
-  - pip install requests pytest-cov coveralls
+  - pip install requests pytest-cov coveralls kafka
 before_script:
   - docker-compose -f tests/config/docker-compose.yml up -d
   - sleep 40

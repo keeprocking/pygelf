@@ -8,6 +8,9 @@ except ImportError:
 
 from logging.handlers import SocketHandler, DatagramHandler
 from logging import Handler as LoggingHandler
+
+from kafka import KafkaProducer
+
 from pygelf import gelf
 
 
@@ -159,3 +162,24 @@ class GelfHttpHandler(BaseHandler, LoggingHandler):
         data = self.convert_record_to_gelf(record)
         connection = httplib.HTTPConnection(host=self.host, port=self.port, timeout=self.timeout)
         connection.request('POST', self.path, data, self.headers)
+
+
+class GelfKafkaHandler(BaseHandler, LoggingHandler):
+    """
+    Logging Handler that transforms each record into GELF and sends it over an Kafka-Message Bus
+
+    :param bootstrap_servers: list of kafka brokers
+    :param topic: destination topic for the gelf messages
+
+    """
+
+    def __init__(self, bootstrap_servers, topic, **kwargs):
+        LoggingHandler.__init__(self)
+        BaseHandler.__init__(self, compress=False, **kwargs)
+
+        self.topic = topic
+        self.producer = KafkaProducer(bootstrap_servers=bootstrap_servers)
+
+    def emit(self, record):
+        self.producer.send(self.topic,
+                           self.convert_record_to_gelf(record))
