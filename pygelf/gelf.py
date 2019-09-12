@@ -34,7 +34,7 @@ def make(record, domain, debug, version, additional_fields, include_extra_fields
         'version': version,
         'short_message': record.getMessage(),
         'timestamp': record.created,
-        'level': LEVELS[record.levelno],
+        'level': LEVELS[record.levelno] if type(record.levelno) != int else record.levelno,
         'host': domain
     }
 
