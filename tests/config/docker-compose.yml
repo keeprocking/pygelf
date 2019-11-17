@@ -3,10 +3,10 @@ services:
   mongo:
     image: "mongo:3"
   elasticsearch:
-    image: "elasticsearch:2"
+    image: "elasticsearch:6.8.2"
     command: "elasticsearch -Des.cluster.name='graylog'"
   graylog:
-    image: "graylog/graylog:2.5"
+    image: "graylog/graylog:3.1"
     environment:
       GRAYLOG_PASSWORD_SECRET: CVanHILkuYhsxE50BrNR6FFt75rS3h0V2uUlHxAshGB90guZznEoDxN7zhPx6Bcn61mfhY2T5r0PRkZVwowsTkHU2rBZnv0d
       GRAYLOG_ROOT_PASSWORD_SHA2: 8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918
@@ -14,7 +14,6 @@ services:
       GRAYLOG_CONTENT_PACKS_AUTO_LOAD: grok-patterns.json,inputs.json
       GRAYLOG_ELASTICSEARCH_HOSTS: http://elasticsearch:9200
     volumes:
-      - ./inputs.json:/usr/share/graylog/data/contentpacks/inputs.json
       - ./cert.pem:/usr/share/graylog/data/cert.pem
       - ./key.pem:/usr/share/graylog/data/key.pem
     links:

@@ -1,0 +1,54 @@
+#!/bin/bash
+
+API_URL="http://localhost:9000/api"
+
+TCP_INPUT='{
+    "title": "tcp",
+    "configuration": {
+        "bind_address": "0.0.0.0",
+        "port": 12201
+    },
+    "type": "org.graylog2.inputs.gelf.tcp.GELFTCPInput",
+    "global": true
+}'
+
+UDP_INPUT='{
+    "title": "udp",
+    "configuration": {
+        "bind_address": "0.0.0.0",
+        "port": 12202
+    },
+    "type": "org.graylog2.inputs.gelf.udp.GELFUDPInput",
+    "global": true
+}'
+
+HTTP_INPUT='{
+    "title": "http",
+    "configuration": {
+        "bind_address": "0.0.0.0",
+        "port": 12203
+    },
+    "type": "org.graylog2.inputs.gelf.http.GELFHttpInput",
+    "global": true
+}'
+
+TLS_INPUT='{
+    "title": "tls",
+    "configuration": {
+        "bind_address": "0.0.0.0",
+        "port": 12204,
+        "tls_enable": true,
+        "tls_cert_file": "/usr/share/graylog/data/cert.pem",
+        "tls_key_file": "/usr/share/graylog/data/key.pem",
+        "tls_key_password": "secret"
+    },
+    "type": "org.graylog2.inputs.gelf.tcp.GELFTCPInput",
+    "global": true
+}'
+
+curl -s -u admin:admin "$API_URL/search/universal/relative?query=test&range=5&fields=message" > /dev/null || true
+
+curl -s -u admin:admin -X "POST" -H "Content-Type: application/json" -H "X-Requested-By: cli" -d "${TCP_INPUT}" "$API_URL/system/inputs" > /dev/null
+curl -s -u admin:admin -X "POST" -H "Content-Type: application/json" -H "X-Requested-By: cli" -d "${UDP_INPUT}" "$API_URL/system/inputs" > /dev/null
+curl -s -u admin:admin -X "POST" -H "Content-Type: application/json" -H "X-Requested-By: cli" -d "${HTTP_INPUT}" "$API_URL/system/inputs" > /dev/null
+curl -s -u admin:admin -X "POST" -H "Content-Type: application/json" -H "X-Requested-By: cli" -d "${TLS_INPUT}" "$API_URL/system/inputs" > /dev/null
