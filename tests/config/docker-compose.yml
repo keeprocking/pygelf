@@ -1,20 +1,21 @@
 version: '2'
 services:
   mongo:
-    image: "mongo:3"
+    image: "mongo:3.3"
   elasticsearch:
-    image: "elasticsearch:2"
-    command: "elasticsearch -Des.cluster.name='graylog'"
-  graylog:
-    image: "graylog/graylog:2.5"
+    image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.8.2
     environment:
-      GRAYLOG_PASSWORD_SECRET: CVanHILkuYhsxE50BrNR6FFt75rS3h0V2uUlHxAshGB90guZznEoDxN7zhPx6Bcn61mfhY2T5r0PRkZVwowsTkHU2rBZnv0d
-      GRAYLOG_ROOT_PASSWORD_SHA2: 8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918
-      GRAYLOG_WEB_ENDPOINT_URI: http://127.0.0.1:9000/api
-      GRAYLOG_CONTENT_PACKS_AUTO_LOAD: grok-patterns.json,inputs.json
-      GRAYLOG_ELASTICSEARCH_HOSTS: http://elasticsearch:9200
+      - http.host=0.0.0.0
+      - transport.host=localhost
+      - network.host=0.0.0.0
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+  graylog:
+    image: "graylog/graylog:3.3"
+    environment:
+      - GRAYLOG_PASSWORD_SECRET=CVanHILkuYhsxE50BrNR6FFt75rS3h0V2uUlHxAshGB90guZznEoDxN7zhPx6Bcn61mfhY2T5r0PRkZVwowsTkHU2rBZnv0d
+      - GRAYLOG_ROOT_PASSWORD_SHA2=8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918
+      - GRAYLOG_HTTP_EXTERNAL_URI=http://127.0.0.1:9000/
     volumes:
-      - ./inputs.json:/usr/share/graylog/data/contentpacks/inputs.json
       - ./cert.pem:/usr/share/graylog/data/cert.pem
       - ./key.pem:/usr/share/graylog/data/key.pem
     links:
