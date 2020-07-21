@@ -1,6 +1,6 @@
 pygelf
 ======
-|travis| |coveralls| |pypi|
+|travis| |coveralls| |pypi| |downloads|
 
 .. |travis| image:: https://travis-ci.org/keeprocking/pygelf.svg?branch=master
     :target: https://travis-ci.org/keeprocking/pygelf
@@ -8,6 +8,8 @@ pygelf
     :target: https://pypi.python.org/pypi/pygelf
 .. |coveralls| image:: https://coveralls.io/repos/github/keeprocking/pygelf/badge.svg?branch=master
     :target: https://coveralls.io/github/keeprocking/pygelf?branch=master
+.. |downloads| image:: https://img.shields.io/pypi/dm/pygelf.svg
+    :target: https://pypi.python.org/pypi/pygelf
 
 
 Python logging handlers with GELF (Graylog Extended Log Format) support.
