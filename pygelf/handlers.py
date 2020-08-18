@@ -197,6 +197,9 @@ class GelfHttpsHandler(BaseHandler, LoggingHandler):
         # create_default_context returns an SSLContext object
         self.ctx = ssl.create_default_context()
 
+        if validate and ca_certs is None:
+            raise ValueError('CA bundle file path must be specified')
+
         if not validate:
             self.ctx.check_hostname = False
             self.ctx.verify_mode = ssl.CERT_NONE
