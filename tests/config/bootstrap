@@ -40,8 +40,7 @@ TLS_INPUT='{
         "port": 12204,
         "tls_enable": true,
         "tls_cert_file": "/usr/share/graylog/data/cert.pem",
-        "tls_key_file": "/usr/share/graylog/data/key.pem",
-        "tls_key_password": "secret"
+        "tls_key_file": "/usr/share/graylog/data/key.pem"
     },
     "type": "org.graylog2.inputs.gelf.tcp.GELFTCPInput",
     "global": true
@@ -56,8 +55,7 @@ HTTPS_INPUT='{
         "tls_client_auth": "disabled",
         "tls_client_auth_cert_file": "",
         "tls_enable": true,
-        "tls_key_file": "/usr/share/graylog/data/key.pem",
-        "tls_key_password": "secret"
+        "tls_key_file": "/usr/share/graylog/data/key.pem"
     },
     "type": "org.graylog2.inputs.gelf.http.GELFHttpInput",
     "global": true  
@@ -81,3 +79,5 @@ for _ in {1..5}; do
     curl -k -X "POST" -H "Content-Type: application/json" "https://localhost:12205/gelf" -p0 -d '{"short_message": "warm-up", "host": "localhost"}'
     sleep 1
 done
+
+docker exec -u 0 $(docker ps |grep graylog | awk '{print $1}') chown graylog data/key.pem
