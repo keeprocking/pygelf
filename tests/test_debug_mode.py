@@ -1,5 +1,5 @@
 import pytest
-from pygelf import GelfTcpHandler, GelfUdpHandler, GelfHttpHandler, GelfTlsHandler
+from pygelf import GelfTcpHandler, GelfUdpHandler, GelfHttpHandler, GelfTlsHandler, GelfHttpsHandler
 from tests.helper import logger, get_unique_message, log_warning
 
 
@@ -10,7 +10,9 @@ from tests.helper import logger, get_unique_message, log_warning
     GelfHttpHandler(host='127.0.0.1', port=12203, debug=True),
     GelfHttpHandler(host='127.0.0.1', port=12203, compress=False, debug=True),
     GelfTlsHandler(host='127.0.0.1', port=12204, debug=True),
-    # GelfTlsHandler(host='127.0.0.1', port=12204, debug=True, validate=True, ca_certs='tests/config/cert.pem'),
+    GelfTlsHandler(host='127.0.0.1', port=12204, debug=True, validate=True, ca_certs='tests/config/cert.pem'),
+    GelfHttpsHandler(host='localhost', port=12205, debug=True, validate=True, ca_certs='tests/config/cert.pem')
+
 ])
 def handler(request):
     return request.param

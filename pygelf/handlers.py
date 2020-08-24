@@ -159,3 +159,59 @@ class GelfHttpHandler(BaseHandler, LoggingHandler):
         data = self.convert_record_to_gelf(record)
         connection = httplib.HTTPConnection(host=self.host, port=self.port, timeout=self.timeout)
         connection.request('POST', self.path, data, self.headers)
+
+
+class GelfHttpsHandler(BaseHandler, LoggingHandler):
+
+    def __init__(self, host, port, compress=True, path='/gelf', timeout=5, validate=False, ca_certs=None, certfile=None, keyfile=None, keyfile_password=None, **kwargs):
+        """
+        Logging handler that transforms each record into GELF (graylog extended log format) and sends it over HTTP.
+
+        :param host: GELF HTTP input host
+        :param port: GELF HTTP input port
+        :param compress: compress message before sending it to the server or not
+        :param path: path of the HTTP input (http://docs.graylog.org/en/latest/pages/sending_data.html#gelf-via-http)
+        :param timeout: amount of seconds that HTTP client should wait before it discards the request
+                        if the server doesn't respond
+        :param validate: whether or not to validate the input's certificate
+        :param ca_certs: path to the CA certificate file that signed the certificate the input is using
+        :param certfile: not yet used
+        :param keyfile: not yet used
+        :param keyfile_password: not yet used
+        """
+
+        LoggingHandler.__init__(self)
+        BaseHandler.__init__(self, compress=compress, **kwargs)
+
+        self.host = host
+        self.port = port
+        self.path = path
+        self.timeout = timeout
+        self.headers = {}
+        self.ca_certs = ca_certs
+        self.keyfile = keyfile
+        self.certfile = certfile
+        self.keyfile_password = keyfile_password
+
+        # Set up context: https://docs.python.org/3/library/http.client.html#http.client.HTTPSConnection
+        # create_default_context returns an SSLContext object
+        self.ctx = ssl.create_default_context()
+
+        if validate and ca_certs is None:
+            raise ValueError('CA bundle file path must be specified')
+
+        if not validate:
+            self.ctx.check_hostname = False
+            self.ctx.verify_mode = ssl.CERT_NONE
+        else:
+            # Load our CA file
+            self.ctx.load_verify_locations(cafile=self.ca_certs)
+
+
+        if compress:
+            self.headers['Content-Encoding'] = 'gzip,deflate'
+
+    def emit(self, record):
+        data = self.convert_record_to_gelf(record)
+        connection = httplib.HTTPSConnection(host=self.host, port=self.port, context=self.ctx, timeout=self.timeout)
+        connection.request('POST', self.path, data, self.headers)
