@@ -9,7 +9,7 @@ setup(
     keywords='logging udp tcp ssl tls graylog2 graylog gelf',
     author='Ivan Mukhin',
     author_email='muhin.ivan@gmail.com',
-    url='https://github.com/keeprocking/pygelf',
+    url='https://github.com/kepeder/pygelf',
     long_description=open('README.rst').read(),
     license='MIT',
     classifiers=[

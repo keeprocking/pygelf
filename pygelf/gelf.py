@@ -29,7 +29,7 @@ SKIP_LIST = (
 )
 
 
-def make(record, domain, debug, version, additional_fields, include_extra_fields=False):
+def make(record, domain, debug, version, additional_fields, additional_env_fields, include_extra_fields=False):
     gelf = {
         'version': version,
         'short_message': record.getMessage(),
@@ -54,6 +54,14 @@ def make(record, domain, debug, version, additional_fields, include_extra_fields
 
     if additional_fields is not None:
         gelf.update(additional_fields)
+
+    if additional_env_fields is not None:
+        appended = {}
+        for name, env in additional_env_fields:
+            if env in os.environ:
+                appended["_" + name] = os.environ.get(env)
+
+        gelf.update(appended)
 
     if include_extra_fields:
         add_extra_fields(gelf, record)

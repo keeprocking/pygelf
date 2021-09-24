@@ -13,7 +13,7 @@ from pygelf import gelf
 
 class BaseHandler(object):
     def __init__(self, debug=False, version='1.1', include_extra_fields=False, compress=False,
-                 static_fields=None, json_default=gelf.object_to_json, **kwargs):
+                 static_fields=None, json_default=gelf.object_to_json, additional_env_fields=None, **kwargs):
         """
         Logging handler that transforms each record into GELF (graylog extended log format) and sends it over TCP.
 
@@ -23,6 +23,10 @@ class BaseHandler(object):
         :param kwargs: additional fields that will be included in the log message, e.g. application name.
                        Each additional field should start with underscore, e.g. _app_name
         """
+
+        self.additional_env_fields = additional_env_fields
+        if self.additional_env_fields is None:
+            self.additional_env_fields = {}
 
         self.debug = debug
         self.version = version
@@ -35,7 +39,7 @@ class BaseHandler(object):
 
     def convert_record_to_gelf(self, record):
         return gelf.pack(
-            gelf.make(record, self.domain, self.debug, self.version, self.additional_fields, self.include_extra_fields),
+            gelf.make(record, self.domain, self.debug, self.version, self.additional_fields, self.additional_env_fields, self.include_extra_fields),
             self.compress, self.json_default
         )
 
