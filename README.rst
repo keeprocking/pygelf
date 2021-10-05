@@ -135,15 +135,16 @@ Example:
     handler = GelfUdpHandler(host='127.0.0.1', port=9402, include_extra_fields=True)
     logger.addHandler(handler)
 
-Defining fields from Environment
+Defining fields from environment
 ================================
-If you need to include some fields from the environment into your logs, add them to record by using `additional_env_fields` in **kwargs in create handler.
 
-The following example will add a field `env` to the logs taking values from the environment variable `FLASK_ENV`.
+If you need to include some fields from the environment into your logs, add them to record by using `additional_env_fields`.
+
+The following example will add an `env` field to the logs, taking its value from the environment variable `FLASK_ENV`.
 
 .. code:: python
 
-    handler = GelfTcpHandler(host='127.0.0.1', port=9402, include_extra_fields=True, additional_env_fields={env: "FLASK_ENV"})
+    handler = GelfTcpHandler(host='127.0.0.1', port=9402, include_extra_fields=True, additional_env_fields={env: 'FLASK_ENV'})
     logger.addHandler(handler)
 
 The following can also be used in defining logging from configuration files (yaml/ini):
