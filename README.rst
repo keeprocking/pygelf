@@ -136,7 +136,7 @@ Example:
     logger.addHandler(handler)
 
 Defining fields from Environment
-==============
+================================
 If you need to include some fields from the environment into your logs, add them to record by using `additional_env_fields` in **kwargs in create handler.
 
 The following example will add a field `env` to the logs taking values from the environment variable `FLASK_ENV`.
