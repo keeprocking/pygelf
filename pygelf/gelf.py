@@ -57,7 +57,7 @@ def make(record, domain, debug, version, additional_fields, additional_env_field
 
     if additional_env_fields is not None:
         appended = {}
-        for name, env in additional_env_fields:
+        for name, env in additional_env_fields.items():
             if env in os.environ:
                 appended["_" + name] = os.environ.get(env)
 
