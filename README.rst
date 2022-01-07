@@ -144,7 +144,7 @@ The following example will add an `env` field to the logs, taking its value from
 
 .. code:: python
 
-    handler = GelfTcpHandler(host='127.0.0.1', port=9402, include_extra_fields=True, additional_env_fields={env: 'FLASK_ENV'})
+    handler = GelfTcpHandler(host='127.0.0.1', port=9402, include_extra_fields=True, additional_env_fields={'env': 'FLASK_ENV'})
     logger.addHandler(handler)
 
 The following can also be used in defining logging from configuration files (yaml/ini):
