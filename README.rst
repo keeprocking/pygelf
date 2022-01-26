@@ -8,7 +8,7 @@ pygelf
     :target: https://pypi.python.org/pypi/pygelf
 .. |coveralls| image:: https://coveralls.io/repos/github/keeprocking/pygelf/badge.svg?branch=master
     :target: https://coveralls.io/github/keeprocking/pygelf?branch=master
-.. |downloads| image:: https://img.shields.io/pypi/dm/pygelf.svg
+.. |downloads| image:: https://pepy.tech/badge/pygelf
     :target: https://pypi.python.org/pypi/pygelf
 
 
