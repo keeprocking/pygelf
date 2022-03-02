@@ -8,9 +8,8 @@ pygelf
     :target: https://pypi.python.org/pypi/pygelf
 .. |coveralls| image:: https://coveralls.io/repos/github/keeprocking/pygelf/badge.svg?branch=master
     :target: https://coveralls.io/github/keeprocking/pygelf?branch=master
-.. |downloads| image:: https://pepy.tech/badge/pygelf
+.. |downloads| image:: https://pepy.tech/badge/pygelf/month
     :target: https://pypi.python.org/pypi/pygelf
-
 
 Python logging handlers with GELF (Graylog Extended Log Format) support.
 
