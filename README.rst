@@ -26,7 +26,7 @@ Usage
 
 .. code:: python
 
-    from pygelf import GelfTcpHandler, GelfUdpHandler, GelfTlsHandler, GelfHttpHandler
+    from pygelf import GelfTcpHandler, GelfUdpHandler, GelfTlsHandler, GelfHttpHandler, GelfHttpsHandler
     import logging
 
 
@@ -36,6 +36,7 @@ Usage
     logger.addHandler(GelfUdpHandler(host='127.0.0.1', port=9402))
     logger.addHandler(GelfTlsHandler(host='127.0.0.1', port=9403))
     logger.addHandler(GelfHttpHandler(host='127.0.0.1', port=9404))
+    logger.addHandler(GelfHttpsHandler(host='127.0.0.1', port=9405))
 
     logger.info('hello gelf')
 
@@ -101,6 +102,17 @@ HTTP:
 - **compress** (True by default) - if true, compress log messages before sending them to the server
 - **path** ('/gelf' by default) - path of the HTTP input (http://docs.graylog.org/en/latest/pages/sending_data.html#gelf-via-http)
 - **timeout** (5 by default) - amount of seconds that HTTP client should wait before it discards the request if the server doesn't respond
+
+HTTPS:
+
+- **compress** (True by default) - if true, compress log messages before sending them to the server
+- **path** ('/gelf' by default) - path of the HTTP input (http://docs.graylog.org/en/latest/pages/sending_data.html#gelf-via-http)
+- **timeout** (5 by default) - amount of seconds that HTTP client should wait before it discards the request if the server doesn't respond
+- **validate** whether or not to validate the input's certificate
+- **param ca_certs** path to the CA certificate file that signed the certificate the input is using
+- **param certfile** not yet used
+- **param keyfile** not yet used
+- **param keyfile_password** not yet used
 
 Static fields
 =============
