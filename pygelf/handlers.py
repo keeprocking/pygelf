@@ -8,8 +8,12 @@ except ImportError:
 
 from logging.handlers import SocketHandler, DatagramHandler
 from logging import Handler as LoggingHandler
+from base64 import b64encode
 from pygelf import gelf
 
+def get_basic_auth_header(username, password):
+    token = b64encode(f"{username}:{password}".encode('utf-8')).decode("ascii")
+    return f'Basic {token}'
 
 class BaseHandler(object):
     def __init__(self, debug=False, version='1.1', include_extra_fields=False, compress=False,
@@ -135,7 +139,7 @@ class GelfTlsHandler(GelfTcpHandler):
 
 class GelfHttpHandler(BaseHandler, LoggingHandler):
 
-    def __init__(self, host, port, compress=True, path='/gelf', timeout=5, **kwargs):
+    def __init__(self, host, port, username=None, password=None, compress=True, path='/gelf', timeout=5, **kwargs):
         """
         Logging handler that transforms each record into GELF (graylog extended log format) and sends it over HTTP.
 
@@ -159,15 +163,23 @@ class GelfHttpHandler(BaseHandler, LoggingHandler):
         if compress:
             self.headers['Content-Encoding'] = 'gzip,deflate'
 
+        if username and password:
+            self.headers['Authorization'] = get_basic_auth_header(username, password)
+
     def emit(self, record):
-        data = self.convert_record_to_gelf(record)
-        connection = httplib.HTTPConnection(host=self.host, port=self.port, timeout=self.timeout)
-        connection.request('POST', self.path, data, self.headers)
+        try:
+            data = self.convert_record_to_gelf(record)
+            connection = httplib.HTTPConnection(host=self.host, port=self.port, timeout=self.timeout)
+            connection.request('POST', self.path, data, self.headers)
+            res = connection.getresponse()
+            assert res.status == httplib.ACCEPTED
+        except:
+            self.handleError(record)
 
 
 class GelfHttpsHandler(BaseHandler, LoggingHandler):
 
-    def __init__(self, host, port, compress=True, path='/gelf', timeout=5, validate=False, ca_certs=None, certfile=None, keyfile=None, keyfile_password=None, **kwargs):
+    def __init__(self, host, port, username=None, password=None, compress=True, path='/gelf', timeout=5, validate=False, ca_certs=None, certfile=None, keyfile=None, keyfile_password=None, **kwargs):
         """
         Logging handler that transforms each record into GELF (graylog extended log format) and sends it over HTTP.
 
@@ -211,11 +223,18 @@ class GelfHttpsHandler(BaseHandler, LoggingHandler):
             # Load our CA file
             self.ctx.load_verify_locations(cafile=self.ca_certs)
 
-
         if compress:
             self.headers['Content-Encoding'] = 'gzip,deflate'
 
+        if username and password:
+            self.headers['Authorization'] = get_basic_auth_header(username, password)
+
     def emit(self, record):
-        data = self.convert_record_to_gelf(record)
-        connection = httplib.HTTPSConnection(host=self.host, port=self.port, context=self.ctx, timeout=self.timeout)
-        connection.request('POST', self.path, data, self.headers)
+        try:
+            data = self.convert_record_to_gelf(record)
+            connection = httplib.HTTPSConnection(host=self.host, port=self.port, context=self.ctx, timeout=self.timeout)
+            connection.request('POST', self.path, data, self.headers)
+            res = connection.getresponse()
+            assert res.status == httplib.ACCEPTED
+        except:
+            self.handleError(record)
