@@ -170,9 +170,6 @@ class GelfHttpHandler(BaseHandler, LoggingHandler):
         data = self.convert_record_to_gelf(record)
         connection = httplib.HTTPConnection(host=self.host, port=self.port, timeout=self.timeout)
         connection.request('POST', self.path, data, self.headers)
-        res = connection.getresponse()
-        if res.status != httplib.ACCEPTED:
-            raise Exception(f'GELF reply is: {res.status} {res.reason}')
 
 
 class GelfHttpsHandler(BaseHandler, LoggingHandler):
@@ -231,6 +228,3 @@ class GelfHttpsHandler(BaseHandler, LoggingHandler):
         data = self.convert_record_to_gelf(record)
         connection = httplib.HTTPSConnection(host=self.host, port=self.port, context=self.ctx, timeout=self.timeout)
         connection.request('POST', self.path, data, self.headers)
-        res = connection.getresponse()
-        if res.status != httplib.ACCEPTED:
-            raise Exception(f'GELF reply is: {res.status} {res.reason}')
