@@ -167,11 +167,13 @@ class GelfHttpHandler(BaseHandler, LoggingHandler):
             self.headers['Authorization'] = get_basic_auth_header(username, password)
 
     def emit(self, record):
-        data = self.convert_record_to_gelf(record)
-        connection = httplib.HTTPConnection(host=self.host, port=self.port, timeout=self.timeout)
-        connection.request('POST', self.path, data, self.headers)
-        res = connection.getresponse()
-        if res.status != httplib.ACCEPTED:
+        try:
+            data = self.convert_record_to_gelf(record)
+            connection = httplib.HTTPConnection(host=self.host, port=self.port, timeout=self.timeout)
+            connection.request('POST', self.path, data, self.headers)
+            res = connection.getresponse()
+            assert res.status == httplib.ACCEPTED
+        except:
             self.handleError(record)
 
 
@@ -228,9 +230,11 @@ class GelfHttpsHandler(BaseHandler, LoggingHandler):
             self.headers['Authorization'] = get_basic_auth_header(username, password)
 
     def emit(self, record):
-        data = self.convert_record_to_gelf(record)
-        connection = httplib.HTTPSConnection(host=self.host, port=self.port, context=self.ctx, timeout=self.timeout)
-        connection.request('POST', self.path, data, self.headers)
-        res = connection.getresponse()
-        if res.status != httplib.ACCEPTED:
+        try:
+            data = self.convert_record_to_gelf(record)
+            connection = httplib.HTTPSConnection(host=self.host, port=self.port, context=self.ctx, timeout=self.timeout)
+            connection.request('POST', self.path, data, self.headers)
+            res = connection.getresponse()
+            assert res.status == httplib.ACCEPTED
+        except:
             self.handleError(record)
