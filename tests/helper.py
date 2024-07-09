@@ -5,7 +5,7 @@ import pytest
 import requests
 
 
-@pytest.yield_fixture
+@pytest.fixture
 def logger(handler):
     logger = logging.getLogger('test')
     logger.addHandler(handler)
