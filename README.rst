@@ -1,15 +1,14 @@
 pygelf
 ======
-|gh-actions| |coveralls| |pypi| |downloads|
 
-.. |gh-actions| image:: https://github.com/keeprocking/pygelf/actions/workflows/tests.yml/badge.svg?branch=master
-    :target: https://github.com/keeprocking/pygelf/actions
-.. |pypi| image:: https://badge.fury.io/py/pygelf.svg
-    :target: https://pypi.python.org/pypi/pygelf
-.. |coveralls| image:: https://coveralls.io/repos/github/keeprocking/pygelf/badge.svg?branch=master
-    :target: https://coveralls.io/github/keeprocking/pygelf?branch=master
-.. |downloads| image:: https://pepy.tech/badge/pygelf/month
-    :target: https://pypi.python.org/pypi/pygelf
+.. image:: https://github.com/keeprocking/pygelf/actions/workflows/tests.yml/badge.svg?branch=master
+   :target: https://github.com/keeprocking/pygelf/actions
+.. image:: https://coveralls.io/repos/github/keeprocking/pygelf/badge.svg?branch=master
+   :target: https://coveralls.io/github/keeprocking/pygelf?branch=master
+.. image:: https://badge.fury.io/py/pygelf.svg
+   :target: https://pypi.python.org/pypi/pygelf
+.. image:: https://img.shields.io/pypi/dm/pygelf
+   :target: https://pypi.python.org/pypi/pygelf
 
 Python logging handlers with GELF (Graylog Extended Log Format) support.
 
