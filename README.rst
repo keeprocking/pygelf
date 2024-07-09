@@ -107,11 +107,11 @@ HTTPS:
 - **compress** (True by default) - if true, compress log messages before sending them to the server
 - **path** ('/gelf' by default) - path of the HTTP input (http://docs.graylog.org/en/latest/pages/sending_data.html#gelf-via-http)
 - **timeout** (5 by default) - amount of seconds that HTTP client should wait before it discards the request if the server doesn't respond
-- **validate** whether or not to validate the input's certificate
-- **param ca_certs** path to the CA certificate file that signed the certificate the input is using
-- **param certfile** not yet used
-- **param keyfile** not yet used
-- **param keyfile_password** not yet used
+- **validate** - whether or not to validate the input's certificate
+- **ca_certs** - path to the CA certificate file that signed the certificate the input is using
+- **certfile** - not yet used
+- **keyfile** - not yet used
+- **keyfile_password** - not yet used
 
 Static fields
 =============
@@ -183,14 +183,3 @@ The following can also be used in defining logging from configuration files (yam
     [logger_root]
     level=WARN
     handlers=graylog
-
-Running tests
-=============
-
-To run tests, you'll need tox_. After installing, simply run it:
-
-.. code::
-
-    tox
-
-.. _tox: https://pypi.python.org/pypi/tox
