@@ -72,7 +72,7 @@ def make(record, domain, debug, version, additional_fields, additional_env_field
 def add_extra_fields(gelf, record):
     for key, value in record.__dict__.items():
         if key not in SKIP_LIST and not key.startswith('_'):
-            gelf['_%s' % key] = value
+            gelf[f'_{key}'] = value
 
 
 def object_to_json(obj):
@@ -90,7 +90,7 @@ def pack(gelf, compress, default):
 def split(gelf, chunk_size):
     header = b'\x1e\x0f'
     message_id = os.urandom(8)
-    chunks = [gelf[pos:pos+chunk_size] for pos in range(0, len(gelf), chunk_size)]
+    chunks = [gelf[pos:pos + chunk_size] for pos in range(0, len(gelf), chunk_size)]
     number_of_chunks = len(chunks)
 
     for chunk_index, chunk in enumerate(chunks):

@@ -1,9 +1,9 @@
 pygelf
 ======
-|travis| |coveralls| |pypi| |downloads|
+|gh-actions| |coveralls| |pypi| |downloads|
 
-.. |travis| image:: https://travis-ci.org/keeprocking/pygelf.svg?branch=master
-    :target: https://travis-ci.org/keeprocking/pygelf
+.. |gh-actions| image:: https://github.com/keeprocking/pygelf/actions/workflows/tests.yml/badge.svg?branch=master
+    :target: https://github.com/keeprocking/pygelf/actions
 .. |pypi| image:: https://badge.fury.io/py/pygelf.svg
     :target: https://pypi.python.org/pypi/pygelf
 .. |coveralls| image:: https://coveralls.io/repos/github/keeprocking/pygelf/badge.svg?branch=master

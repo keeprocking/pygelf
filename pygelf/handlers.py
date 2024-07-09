@@ -11,7 +11,7 @@ from logging import Handler as LoggingHandler
 from pygelf import gelf
 
 
-class BaseHandler(object):
+class BaseHandler:
     def __init__(self, debug=False, version='1.1', include_extra_fields=False, compress=False,
                  static_fields=None, json_default=gelf.object_to_json, additional_env_fields=None, **kwargs):
         """
@@ -39,7 +39,8 @@ class BaseHandler(object):
 
     def convert_record_to_gelf(self, record):
         return gelf.pack(
-            gelf.make(record, self.domain, self.debug, self.version, self.additional_fields, self.additional_env_fields, self.include_extra_fields),
+            gelf.make(record, self.domain, self.debug, self.version, self.additional_fields,
+                      self.additional_env_fields, self.include_extra_fields),
             self.compress, self.json_default
         )
 
@@ -167,7 +168,8 @@ class GelfHttpHandler(BaseHandler, LoggingHandler):
 
 class GelfHttpsHandler(BaseHandler, LoggingHandler):
 
-    def __init__(self, host, port, compress=True, path='/gelf', timeout=5, validate=False, ca_certs=None, certfile=None, keyfile=None, keyfile_password=None, **kwargs):
+    def __init__(self, host, port, compress=True, path='/gelf', timeout=5, validate=False,
+                 ca_certs=None, certfile=None, keyfile=None, keyfile_password=None, **kwargs):
         """
         Logging handler that transforms each record into GELF (graylog extended log format) and sends it over HTTP.
 
@@ -210,7 +212,6 @@ class GelfHttpsHandler(BaseHandler, LoggingHandler):
         else:
             # Load our CA file
             self.ctx.load_verify_locations(cafile=self.ca_certs)
-
 
         if compress:
             self.headers['Content-Encoding'] = 'gzip,deflate'
