@@ -10,15 +10,15 @@ SYSLOG_LEVEL_WARNING = 4
 
 
 @pytest.fixture(params=[
-    GelfTcpHandler(host='127.0.0.1', port=12201),
-    GelfUdpHandler(host='127.0.0.1', port=12202),
-    GelfUdpHandler(host='127.0.0.1', port=12202, compress=False),
-    GelfHttpHandler(host='127.0.0.1', port=12203),
-    GelfHttpHandler(host='127.0.0.1', port=12203, compress=False),
-    GelfTlsHandler(host='127.0.0.1', port=12204),
-    GelfHttpsHandler(host='127.0.0.1', port=12205, validate=False),
+    GelfTcpHandler(host='localhost', port=12201),
+    GelfUdpHandler(host='localhost', port=12202),
+    GelfUdpHandler(host='localhost', port=12202, compress=False),
+    GelfHttpHandler(host='localhost', port=12203),
+    GelfHttpHandler(host='localhost', port=12203, compress=False),
+    GelfTlsHandler(host='localhost', port=12204),
+    GelfHttpsHandler(host='localhost', port=12205, validate=False),
     GelfHttpsHandler(host='localhost', port=12205, validate=True, ca_certs='tests/config/cert.pem'),
-    GelfTlsHandler(host='127.0.0.1', port=12204, validate=True, ca_certs='tests/config/cert.pem'),
+    GelfTlsHandler(host='localhost', port=12204, validate=True, ca_certs='tests/config/cert.pem'),
 ])
 def handler(request):
     return request.param

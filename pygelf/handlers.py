@@ -116,22 +116,26 @@ class GelfTlsHandler(GelfTcpHandler):
 
         GelfTcpHandler.__init__(self, **kwargs)
 
-        self.ca_certs = ca_certs
-        self.reqs = ssl.CERT_REQUIRED if validate else ssl.CERT_NONE
-        self.certfile = certfile
-        self.keyfile = keyfile if keyfile else certfile
+        self.ctx = ssl.create_default_context()
+
+        if not validate:
+            self.ctx.check_hostname = False
+            self.ctx.verify_mode = ssl.CERT_NONE
+
+        if ca_certs:
+            self.ctx.load_verify_locations(cafile=ca_certs)
+
+        if certfile:
+            self.ctx.load_cert_chain(certfile, keyfile)
 
     def makeSocket(self, timeout=1):
-        plain_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        plain = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        plain.settimeout(timeout)
 
-        if hasattr(plain_socket, 'settimeout'):
-            plain_socket.settimeout(timeout)
+        wrapped = self.ctx.wrap_socket(plain, server_hostname=self.host)
+        wrapped.connect((self.host, self.port))
 
-        wrapped_socket = ssl.wrap_socket(plain_socket, ca_certs=self.ca_certs, cert_reqs=self.reqs,
-                                         keyfile=self.keyfile, certfile=self.certfile)
-        wrapped_socket.connect((self.host, self.port))
-
-        return wrapped_socket
+        return wrapped
 
 
 class GelfHttpHandler(BaseHandler, LoggingHandler):
