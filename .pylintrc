@@ -13,7 +13,7 @@ indent-after-paren=4
 expected-line-ending-format=LF
 
 [MESSAGES CONTROL]
-disable=C0111,too-many-arguments,too-many-instance-attributes,deprecated-method
+disable=C0111,too-many-arguments,too-many-instance-attributes
 
 [REPORTS]
 reports=no

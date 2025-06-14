@@ -58,7 +58,7 @@ HTTPS_INPUT='{
         "tls_key_file": "/usr/share/graylog/data/key.pem"
     },
     "type": "org.graylog2.inputs.gelf.http.GELFHttpInput",
-    "global": true  
+    "global": true
 }'
 
 curl -u admin:admin "$API_URL/search/universal/relative?query=test&range=5&fields=message" > /dev/null
@@ -76,9 +76,4 @@ sleep 10
 for _ in {1..5}; do
     curl -X "POST" -H "Content-Type: application/json" "http://localhost:12203/gelf" -p0 -d '{"short_message": "warm-up", "host": "localhost"}'
     sleep 1
-    curl -k -X "POST" -H "Content-Type: application/json" "https://localhost:12205/gelf" -p0 -d '{"short_message": "warm-up", "host": "localhost"}'
-    sleep 1
 done
-
-docker exec -u 0 $(docker ps |grep graylog | awk '{print $1}') chown graylog data/key.pem
-docker exec -u 0 $(docker ps |grep graylog | awk '{print $1}') chmod 0600 data/key.pem
