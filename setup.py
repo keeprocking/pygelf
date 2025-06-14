@@ -3,7 +3,7 @@ from setuptools import setup
 
 setup(
     name='pygelf',
-    version='0.4.2',
+    version='0.4.3',
     packages=['pygelf'],
     description='Logging handlers with GELF support',
     keywords='logging udp tcp ssl tls graylog2 graylog gelf',
@@ -20,6 +20,8 @@ setup(
         'Programming Language :: Python :: 3.9',
         'Programming Language :: Python :: 3.10',
         'Programming Language :: Python :: 3.11',
+        'Programming Language :: Python :: 3.12',
+        'Programming Language :: Python :: 3.13',
         'Programming Language :: Python :: Implementation :: CPython',
         'Programming Language :: Python :: Implementation :: PyPy',
         'Topic :: System :: Logging',

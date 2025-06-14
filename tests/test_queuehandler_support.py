@@ -6,14 +6,14 @@ from tests.helper import logger, get_unique_message, log_exception
 
 
 @pytest.fixture(params=[
-    GelfTcpHandler(host='127.0.0.1', port=12201),
-    GelfUdpHandler(host='127.0.0.1', port=12202),
-    GelfUdpHandler(host='127.0.0.1', port=12202, compress=False),
-    GelfHttpHandler(host='127.0.0.1', port=12203),
-    GelfHttpHandler(host='127.0.0.1', port=12203, compress=False),
-    GelfTlsHandler(host='127.0.0.1', port=12204),
-    GelfHttpsHandler(host='127.0.0.1', port=12205, validate=False),
-    GelfTlsHandler(host='127.0.0.1', port=12204, validate=True, ca_certs='tests/config/cert.pem'),
+    GelfTcpHandler(host='localhost', port=12201),
+    GelfUdpHandler(host='localhost', port=12202),
+    GelfUdpHandler(host='localhost', port=12202, compress=False),
+    GelfHttpHandler(host='localhost', port=12203),
+    GelfHttpHandler(host='localhost', port=12203, compress=False),
+    GelfTlsHandler(host='localhost', port=12204),
+    GelfHttpsHandler(host='localhost', port=12205, validate=False),
+    GelfTlsHandler(host='localhost', port=12204, validate=True, ca_certs='tests/config/cert.pem'),
     GelfHttpsHandler(host='localhost', port=12205, validate=True, ca_certs='tests/config/cert.pem'),
 ])
 def handler(request):
